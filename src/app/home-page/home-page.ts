@@ -7,12 +7,5 @@ import { Component } from '@angular/core';
   styleUrl: './home-page.css'
 })
 export class HomePage {
-  ngOnInit() {
-    const tg = window.Telegram?.WebApp;
-    if (tg) {
-      console.log(tg.viewportStableWidth);
-    }
-
-  }
 
 }
