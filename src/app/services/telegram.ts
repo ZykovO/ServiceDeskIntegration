@@ -18,6 +18,7 @@ interface TgButton {
 export class TelegramService {
   private window;
   tg;
+
   // @ts-ignore
   constructor(@Inject(DOCUMENT) private _document) {
     this.window = this._document.defaultView;
@@ -30,6 +31,14 @@ export class TelegramService {
 
   get BackButton(): TgButton {
     return this.tg.BackButton;
+  }
+
+  get initData(): string {
+    return this.tg.initData;
+  }
+
+  get initDataUnsafe(): any {
+    return this.tg.initDataUnsafe; // объект с user, chat, etc
   }
 
   sendData(data: object) {

@@ -24,7 +24,13 @@ export class HomePage {
 
   ngOnInit(): void {
     this.telegram.BackButton.show();
-    // добавляем функционал для перехода назад в телеграм
     this.telegram.BackButton.onClick(this.goBack);
+
+    const initData = this.telegram.initData;
+    const user = this.telegram.initDataUnsafe?.user;
+
+    console.log('initData:', initData);
+    console.log('Telegram user:', user);
   }
+
 }
