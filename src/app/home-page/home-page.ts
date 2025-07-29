@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
 import {TelegramService} from '../services/telegram';
 import {Router} from '@angular/router';
+import {JsonPipe} from '@angular/common';
 
 @Component({
   selector: 'app-home-page',
-  imports: [],
+  imports: [
+    JsonPipe
+  ],
   templateUrl: './home-page.html',
   styleUrl: './home-page.css'
 })
