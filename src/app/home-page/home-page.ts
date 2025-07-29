@@ -10,7 +10,7 @@ import {Router} from '@angular/router';
 })
 export class HomePage {
   constructor(
-    private telegram: TelegramService,
+    protected telegram: TelegramService,
     private router: Router
   ) {
     // получаем конкретный продукт из сервиса
