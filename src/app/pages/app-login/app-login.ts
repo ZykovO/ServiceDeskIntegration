@@ -3,6 +3,7 @@ import {Router} from '@angular/router';
 import {TelegramService} from '../../services/telegram';
 import {AuthService} from '../../auth/auth-service';
 import {NgIf} from '@angular/common';
+import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-app-login',
@@ -68,4 +69,6 @@ export class AppLogin implements OnInit {
       }
     });
   }
+
+  protected readonly environment = environment;
 }
