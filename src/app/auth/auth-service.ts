@@ -64,7 +64,7 @@ export class AuthService {
 
       // Отправляем данные на бэкенд для получения токена
       return this.http.post<TokenResponse>(
-        `${this.baseApiUrl}auth/telegram/`,
+        `${this.baseApiUrl}/auth/telegram/`,
         {
           initData: initData,
           user: initDataUnsafe.user
@@ -113,7 +113,7 @@ export class AuthService {
     }
 
     return this.http.post<RefreshTokenResponse>(
-      `${this.baseApiUrl}auth/refresh/`,
+      `${this.baseApiUrl}/auth/refresh/`,
       { refresh: this.refresh }
     ).pipe(
       catchError(err => {
