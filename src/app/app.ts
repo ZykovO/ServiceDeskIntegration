@@ -10,9 +10,5 @@ import {TelegramService} from './services/telegram';
 })
 export class App {
   protected readonly title = signal('ServiceDeskBotIntegration');
-  telegram = inject(TelegramService);
-  constructor() {
-    this.telegram.ready();
-  }
 
 }

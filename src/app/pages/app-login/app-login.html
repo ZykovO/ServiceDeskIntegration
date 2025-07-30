@@ -1,0 +1,23 @@
+<div class="login-container">
+  <h2>Вход в приложение</h2>
+
+  <div *ngIf="isLoading" class="loading">
+    Авторизация...
+  </div>
+
+  <div *ngIf="!isLoading && !isTelegramAvailable" class="error">
+    Приложение должно быть открыто из Telegram
+  </div>
+
+  <button
+    *ngIf="!isLoading && isTelegramAvailable"
+    (click)="loginWithTelegram()"
+    class="telegram-login-btn"
+    [disabled]="isLoading">
+    Войти через Telegram
+  </button>
+
+  <div *ngIf="errorMessage" class="error">
+    {{ errorMessage }}
+  </div>
+</div>
