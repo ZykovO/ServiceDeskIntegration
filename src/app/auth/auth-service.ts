@@ -136,6 +136,6 @@ export class AuthService {
   // Вспомогательный метод для получения базового URL API
   private getBaseApiUrl(): string {
     // Можно вынести в environment или конфигурацию
-    return `${environment.apiUrl}/`;
+    return `${environment.apiUrl}`;
   }
 }
