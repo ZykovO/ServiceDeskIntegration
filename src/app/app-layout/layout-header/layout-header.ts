@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, Output, EventEmitter} from '@angular/core';
 
 @Component({
   selector: 'app-layout-header',
@@ -7,5 +7,10 @@ import { Component } from '@angular/core';
   styleUrl: './layout-header.css'
 })
 export class LayoutHeader {
+  title = 'My App';
+  @Output() toggleSidebarEvent = new EventEmitter<void>();
 
+  toggleSidebar() {
+    this.toggleSidebarEvent.emit();
+  }
 }

@@ -1,0 +1,50 @@
+.tg-sidebar {
+  height: 100%;
+  padding: 16px;
+  background: var(--tg-theme-bg-color, #ffffff);
+}
+
+.sidebar-header {
+  padding: 8px 0 16px;
+  border-bottom: 1px solid var(--tg-theme-secondary-bg-color, #f0f0f0);
+  margin-bottom: 16px;
+}
+
+.sidebar-header h2 {
+  margin: 0;
+  color: var(--tg-theme-text-color, #000000);
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.tg-menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.tg-menu-item {
+  margin-bottom: 8px;
+}
+
+.tg-menu-link {
+  display: flex;
+  align-items: center;
+  padding: 12px 8px;
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--tg-theme-text-color, #000000);
+}
+
+.tg-menu-link:hover, .tg-menu-link:active {
+  background: var(--tg-theme-secondary-bg-color, #f0f0f0);
+}
+
+.tg-menu-icon {
+  margin-right: 12px;
+  font-size: 20px;
+}
+
+.tg-menu-text {
+  font-size: 14px;
+}

@@ -1,0 +1,29 @@
+.tg-footer {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  height: 100%;
+}
+
+.tg-footer-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  color: var(--tg-theme-text-color, #000000);
+  flex: 1;
+  height: 100%;
+}
+
+.tg-footer-icon {
+  font-size: 20px;
+  margin-bottom: 4px;
+}
+
+.tg-footer-text {
+  font-size: 10px;
+}

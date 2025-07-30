@@ -16,5 +16,9 @@ import {LayoutFooter} from './layout-footer/layout-footer';
   styleUrl: './app-layout.css'
 })
 export class AppLayout {
+  isSidebarOpen = false;
 
+  toggleSidebar() {
+    this.isSidebarOpen = !this.isSidebarOpen;
+  }
 }
