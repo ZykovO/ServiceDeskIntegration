@@ -12,10 +12,11 @@ import {RouterLink} from '@angular/router';
   styleUrl: './layout-footer.css'
 })
 export class LayoutFooter {
-  footerItems = [
-    // { icon: '🏠', text: 'Home', link: '/' },
-    // { icon: '🔍', text: 'Search', link: '/search' },
-    // { icon: '🛒', text: 'Cart', link: '/cart' },
-    // { icon: '👤', text: 'Profile', link: '/profile' }
-  ];
+  footerItems = undefined
+  //   [
+  //   { icon: '🏠', text: 'Home', link: '/' },
+  //   { icon: '🔍', text: 'Search', link: '/search' },
+  //   { icon: '🛒', text: 'Cart', link: '/cart' },
+  //   { icon: '👤', text: 'Profile', link: '/profile' }
+  // ];
 }
