@@ -3,11 +3,14 @@
     <h2>Menu</h2>
   </div>
   <ul class="tg-menu">
-    <li class="tg-menu-item" *ngFor="let item of menuItems">
-      <a [routerLink]="item.link" class="tg-menu-link">
-        <span class="tg-menu-icon">{{item.icon}}</span>
-        <span class="tg-menu-text">{{item.text}}</span>
-      </a>
-    </li>
+    @if (menuItems) {
+      <li class="tg-menu-item" *ngFor="let item of menuItems">
+        <a [routerLink]="item.link" class="tg-menu-link">
+          <span class="tg-menu-icon">{{item.icon}}</span>
+          <span class="tg-menu-text">{{item.text}}</span>
+        </a>
+      </li>
+    }
+
   </ul>
 </nav>
