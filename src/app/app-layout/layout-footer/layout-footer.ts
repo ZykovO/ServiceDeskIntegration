@@ -13,9 +13,9 @@ import {RouterLink} from '@angular/router';
 })
 export class LayoutFooter {
   footerItems = [
-    { icon: '🏠', text: 'Home', link: '/' },
-    { icon: '🔍', text: 'Search', link: '/search' },
-    { icon: '🛒', text: 'Cart', link: '/cart' },
-    { icon: '👤', text: 'Profile', link: '/profile' }
+    // { icon: '🏠', text: 'Home', link: '/' },
+    // { icon: '🔍', text: 'Search', link: '/search' },
+    // { icon: '🛒', text: 'Cart', link: '/cart' },
+    // { icon: '👤', text: 'Profile', link: '/profile' }
   ];
 }

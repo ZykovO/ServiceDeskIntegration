@@ -13,9 +13,9 @@ import {NgForOf} from '@angular/common';
 })
 export class LayoutSidebar {
   menuItems = [
-    { icon: '🏠', text: 'Home', link: '/' },
-    { icon: '📊', text: 'Dashboard', link: '/dashboard' },
-    { icon: '⚙️', text: 'Settings', link: '/settings' },
-    { icon: 'ℹ️', text: 'About', link: '/about' }
+    // { icon: '🏠', text: 'Home', link: '/' },
+    // { icon: '📊', text: 'Dashboard', link: '/dashboard' },
+    // { icon: '⚙️', text: 'Settings', link: '/settings' },
+    // { icon: 'ℹ️', text: 'About', link: '/about' }
   ];
 }

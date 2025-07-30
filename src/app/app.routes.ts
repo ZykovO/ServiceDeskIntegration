@@ -8,7 +8,7 @@ import {AppLayout} from './app-layout/app-layout';
 
 export const routes: Routes = [
   {
-    path: '', component: AppLayout,canActivate: [canActivateAuth], children: [
+    path: '', component: AppLayout, canActivate: [canActivateAuth], children: [
       {path: 'ticket/:id', component: CloseTicketPage},
 
     ]
