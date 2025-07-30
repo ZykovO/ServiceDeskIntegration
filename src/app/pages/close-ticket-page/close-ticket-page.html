@@ -1,26 +1,63 @@
-<div *ngIf="isLoading">Завантаження...</div>
+<div *ngIf="isLoading" class="telegram-loading">Завантаження...</div>
 
-<div *ngIf="error" class="error">{{ error }}</div>
+<div *ngIf="error" class="telegram-error">{{ error }}</div>
 
-<div *ngIf="ticket">
-  <h2>Заявка №{{ ticket.InternalId }}</h2>
-  <p><strong>Тип:</strong> {{ ticket.Type }}</p>
-  <p><strong>Магазин:</strong> {{ ticket.Shop }}</p>
-  <p><strong>Місто:</strong> {{ ticket.ShopCity }}</p>
-  <p><strong>Дата створення:</strong> {{ ticket.DateCreate }}</p>
-  <p><strong>Статус:</strong> {{ ticket.Status ? 'Виконано' : 'В роботі' }}</p>
+<div *ngIf="ticket" class="telegram-card">
+  <div class="card-header">
+    <h2 class="card-title">Заявка №{{ ticket.InternalId }}</h2>
+    <span class="status-badge" [class.completed]="ticket.Status">
+      {{ ticket.Status ? 'Виконано' : 'В роботі' }}
+    </span>
+  </div>
 
-  <h3>Коментарі:</h3>
-  <ul>
-    <li *ngFor="let comment of ticket.Comentaries">
-      {{ comment.DatetimeAdd }} – <strong>{{ comment.Autor }}</strong>: {{ comment.Text }}
-    </li>
-  </ul>
+  <div class="card-section">
+    <div class="info-item">
+      <span class="info-label">Тип:</span>
+      <span class="info-value">{{ ticket.Type }}</span>
+    </div>
+    <div class="info-item">
+      <span class="info-label">Магазин:</span>
+      <span class="info-value">{{ ticket.Shop }}</span>
+    </div>
+    <div class="info-item">
+      <span class="info-label">Місто:</span>
+      <span class="info-value">{{ ticket.ShopCity }}</span>
+    </div>
+    <div class="info-item">
+      <span class="info-label">Дата створення:</span>
+      <span class="info-value">{{ ticket.DateCreate }}</span>
+    </div>
+  </div>
 
-  <h3>Дії:</h3>
-  <ul>
-    <li *ngFor="let action of ticket.Actions">
-      {{ action.DatetimeAdd }} – <strong>{{ action.Autor }}</strong>: {{ action.Text }}
-    </li>
-  </ul>
+  <div class="card-section" *ngIf="ticket.Comentaries?.length">
+    <h3 class="section-title">Коментарі</h3>
+    <div class="comment-list">
+      <div *ngFor="let comment of ticket.Comentaries" class="comment-item">
+        <div class="comment-header">
+          <span class="comment-author">{{ comment.Autor }}</span>
+          <span class="comment-date">{{ comment.DatetimeAdd }}</span>
+        </div>
+        <div class="comment-text">{{ comment.Text }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-section" *ngIf="ticket.Actions?.length">
+    <h3 class="section-title">Дії</h3>
+    <div class="action-list">
+      <div *ngFor="let action of ticket.Actions" class="action-item">
+        <div class="action-header">
+          <span class="action-author">{{ action.Autor }}</span>
+          <span class="action-date">{{ action.DatetimeAdd }}</span>
+        </div>
+        <div class="action-text">{{ action.Text }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-actions">
+    <!-- Functional buttons will be added here -->
+    <button class="telegram-button primary">Закрити заявку</button>
+    <button class="telegram-button secondary">Додати коментар</button>
+  </div>
 </div>
