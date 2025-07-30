@@ -27,9 +27,13 @@ export class AuthService {
     this.refresh = params.refreshToken;
     this.baseApiUrl = params.baseApiUrl;
     this.user = {
-      id: params.userId,
-      email: '',
-      username: params.username
+      id: params.id,
+      first_name: params.first_name,
+      last_name: params.last_name,
+      username: params.username,
+      language_code: params.language_code,
+      allows_write_to_pm: params.allows_write_to_pm,
+      photo_url: params.photo_url
     };
 
     // Сохраняем в sessionStorage

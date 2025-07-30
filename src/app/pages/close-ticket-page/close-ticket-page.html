@@ -1,0 +1,26 @@
+<div *ngIf="isLoading">Завантаження...</div>
+
+<div *ngIf="error" class="error">{{ error }}</div>
+
+<div *ngIf="ticket">
+  <h2>Заявка №{{ ticket.InternalId }}</h2>
+  <p><strong>Тип:</strong> {{ ticket.Type }}</p>
+  <p><strong>Магазин:</strong> {{ ticket.Shop }}</p>
+  <p><strong>Місто:</strong> {{ ticket.ShopCity }}</p>
+  <p><strong>Дата створення:</strong> {{ ticket.DateCreate }}</p>
+  <p><strong>Статус:</strong> {{ ticket.Status ? 'Виконано' : 'В роботі' }}</p>
+
+  <h3>Коментарі:</h3>
+  <ul>
+    <li *ngFor="let comment of ticket.Comentaries">
+      {{ comment.DatetimeAdd }} – <strong>{{ comment.Autor }}</strong>: {{ comment.Text }}
+    </li>
+  </ul>
+
+  <h3>Дії:</h3>
+  <ul>
+    <li *ngFor="let action of ticket.Actions">
+      {{ action.DatetimeAdd }} – <strong>{{ action.Autor }}</strong>: {{ action.Text }}
+    </li>
+  </ul>
+</div>
