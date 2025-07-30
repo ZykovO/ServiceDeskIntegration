@@ -5,6 +5,8 @@ import { catchError, tap, throwError, Observable, of, map } from 'rxjs';
 import { RefreshTokenResponse, TokenResponse, UserResponse } from './auth-interface';
 import { Router } from '@angular/router';
 import {TelegramService} from '../services/telegram';
+import {environment} from '../../environments/environment';
+
 
 
 @Injectable({
@@ -134,6 +136,6 @@ export class AuthService {
   // Вспомогательный метод для получения базового URL API
   private getBaseApiUrl(): string {
     // Можно вынести в environment или конфигурацию
-    return 'https://your-api-domain.com/api/';
+    return environment.apiUrl;
   }
 }
