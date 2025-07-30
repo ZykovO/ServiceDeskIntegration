@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {NgForOf, NgIf} from '@angular/common';
 import {Ticket} from '../../interfaces/ticket.interface';
 import {TicketService} from '../../services/ticket-service';
+import {ActivatedRoute} from '@angular/router';
 
 @Component({
   selector: 'app-close-ticket-page',
@@ -17,10 +18,11 @@ export class CloseTicketPage implements OnInit {
   isLoading = true;
   error?: string;
 
-  constructor(private ticketService: TicketService) {
+  constructor(private ticketService: TicketService,private route: ActivatedRoute) {
   }
 
   ngOnInit(): void {
+    // const ticketId = Number(this.route.snapshot.paramMap.get('id'));
     const ticketId = 1267032; // Получи ID динамически (например, из route)
     this.ticketService.get_ticket(ticketId).subscribe({
       next: (data) => {
