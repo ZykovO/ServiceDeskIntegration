@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {NgForOf, NgIf} from '@angular/common';
+import {JsonPipe, NgForOf, NgIf} from '@angular/common';
 import {Ticket} from '../../interfaces/ticket.interface';
 import {TicketService} from '../../services/ticket-service';
 import {ActivatedRoute} from '@angular/router';
@@ -8,7 +8,8 @@ import {ActivatedRoute} from '@angular/router';
   selector: 'app-close-ticket-page',
   imports: [
     NgIf,
-    NgForOf
+    NgForOf,
+    JsonPipe
   ],
   templateUrl: './close-ticket-page.html',
   styleUrl: './close-ticket-page.css'
