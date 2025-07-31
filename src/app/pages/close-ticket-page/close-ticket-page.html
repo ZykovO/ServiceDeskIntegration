@@ -4,7 +4,7 @@
 
 <div *ngIf="ticket" class="telegram-card">
   <div class="card-header">
-    <h2 class="card-title">Заявка №{{ ticket.InternalId }}</h2>
+    <h2 class="card-title">Заявка №{{ ticket.InternalId }} ({{ ticket.ExternalId }})</h2>
     <span class="status-badge" [class.completed]="ticket.Status">
       {{ ticket.Status ? 'Виконано' : 'В роботі' }}
     </span>
@@ -26,6 +26,10 @@
     <div class="info-item">
       <span class="info-label">Дата створення:</span>
       <span class="info-value">{{ ticket.DateCreate }}</span>
+    </div>
+    <div class="info-item">
+      <span class="info-label">Срок заявки:</span>
+      <span class="info-value">{{ ticket.Deadline }}</span>
     </div>
   </div>
 
@@ -57,7 +61,9 @@
 
   <div class="card-actions">
     <!-- Functional buttons will be added here -->
-    <button class="telegram-button primary">Закрити заявку</button>
-    <button class="telegram-button secondary">Додати коментар</button>
+    @for (ActionsButton of ticket.ActionsButtons.CloseButtons; track ActionsButton.ActType)
+    {
+      <button class="telegram-button primary">{{ ActionsButton.ActName }}</button>
+    }
   </div>
 </div>

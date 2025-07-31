@@ -1,5 +1,7 @@
 import { Action } from './action.interface';
 import { Comment } from './comment.interface';
+import {ActionsButtonsModel} from './actions_buttons.interface';
+import {TicketFormDataModel} from './ticket_form_data.interface';
 
 export interface Ticket {
   InternalId: number;
@@ -22,7 +24,11 @@ export interface Ticket {
   Status?: boolean | null;
   CompletedWork?: string | null;
   ACtStatus?: string | null;
+
   Actions: Action[];
   Comentaries: Comment[];
   Attachments: string[];
+
+  ActionsButtons: ActionsButtonsModel;
+  FormData?: TicketFormDataModel | null;
 }
