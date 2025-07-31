@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {JsonPipe, NgForOf, NgIf} from '@angular/common';
+import {NgForOf, NgIf} from '@angular/common';
 import {Ticket} from '../../interfaces/ticket.interface';
 import {TicketService} from '../../services/ticket-service';
 import {ActivatedRoute, Router} from '@angular/router';
@@ -9,7 +9,6 @@ import {ActivatedRoute, Router} from '@angular/router';
   imports: [
     NgIf,
     NgForOf,
-    JsonPipe
   ],
   templateUrl: './close-ticket-page.html',
   styleUrl: './close-ticket-page.css'
@@ -44,7 +43,7 @@ export class CloseTicketPage implements OnInit {
 
 
   goToDetailsPage(ticket: Ticket) {
-    this.router.navigate(['/ticket-details', ticket.InternalId]);
+    this.router.navigate(['/ticket', ticket.InternalId, 'close']);
   }
 
 }
