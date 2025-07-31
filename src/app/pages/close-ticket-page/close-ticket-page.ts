@@ -2,7 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {JsonPipe, NgForOf, NgIf} from '@angular/common';
 import {Ticket} from '../../interfaces/ticket.interface';
 import {TicketService} from '../../services/ticket-service';
-import {ActivatedRoute} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 
 @Component({
   selector: 'app-close-ticket-page',
@@ -19,7 +19,9 @@ export class CloseTicketPage implements OnInit {
   isLoading = true;
   error?: string;
 
-  constructor(private ticketService: TicketService,private route: ActivatedRoute) {
+  constructor(  private ticketService: TicketService,
+                private route: ActivatedRoute,
+                private router: Router) {
   }
 
   ngOnInit(): void {
@@ -36,6 +38,13 @@ export class CloseTicketPage implements OnInit {
         this.isLoading = false;
       }
     });
+
+
+  }
+
+
+  goToDetailsPage(ticket: Ticket) {
+    this.router.navigate(['/ticket-details', ticket.InternalId]);
   }
 
 }

@@ -61,9 +61,18 @@
 
   <div class="card-actions">
     <!-- Functional buttons will be added here -->
-    @for (ActionsButton of ticket.ActionsButtons.CloseButtons; track ActionsButton.ActType)
-    {
-      <button class="telegram-button primary">{{ ActionsButton.ActName }}</button>
-    }
+<!--    @for (ActionsButton of ticket.ActionsButtons.CloseButtons; track ActionsButton.ActType)-->
+<!--    {-->
+<!--      <button class="telegram-button primary">{{ ActionsButton.ActName }}</button>-->
+<!--    }-->
+
+    <button
+      *ngFor="let ActionsButton of ticket?.ActionsButtons?.CloseButtons"
+      class="telegram-button primary"
+      (click)="goToDetailsPage(ticket)"
+    >
+      {{ ActionsButton.ActName }}
+    </button>
+
   </div>
 </div>
