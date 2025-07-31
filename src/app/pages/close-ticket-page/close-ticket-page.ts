@@ -23,8 +23,8 @@ export class CloseTicketPage implements OnInit {
   }
 
   ngOnInit(): void {
-    // const ticketId = Number(this.route.snapshot.paramMap.get('id'));
-    const ticketId = 1267032; // Получи ID динамически (например, из route)
+    const ticketId = Number(this.route.snapshot.paramMap.get('id'));
+    // const ticketId = 1267032; // Получи ID динамически (например, из route)
     this.ticketService.get_ticket(ticketId).subscribe({
       next: (data) => {
         this.ticket = data;
