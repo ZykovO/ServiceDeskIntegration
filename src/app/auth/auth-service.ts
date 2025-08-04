@@ -58,10 +58,10 @@ export class AuthService {
       const initData = this.telegramService.initData;
       const initDataUnsafe = this.telegramService.initDataUnsafe;
 
-      if (!initData || !initDataUnsafe?.user) {
-        console.error('Telegram data not available');
-        return of(false);
-      }
+      // if (!initData || !initDataUnsafe?.user) {
+      //   console.error('Telegram data not available');
+      //   return of(false);
+      // }
 
       // Определяем базовый URL API (можно вынести в конфигурацию)
       this.baseApiUrl = this.getBaseApiUrl();
