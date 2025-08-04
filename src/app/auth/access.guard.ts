@@ -22,7 +22,6 @@ export const canActivateAuth = () => {
     };
     authService.initializeFromTelegram(params);
 
-
     // Очищаем URL от параметров
     window.history.replaceState({}, document.title, window.location.pathname);
     return true;
