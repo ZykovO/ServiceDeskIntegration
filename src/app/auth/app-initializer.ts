@@ -12,7 +12,7 @@ export function initializeTelegram() {
       telegramService.ready();
 
       // Настраиваем кнопки при необходимости
-      telegramService.BackButton.show();
+      // telegramService.BackButton.show();
 
       console.log('Telegram WebApp initialized successfully');
       return Promise.resolve();
