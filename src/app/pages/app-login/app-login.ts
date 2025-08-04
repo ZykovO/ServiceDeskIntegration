@@ -2,14 +2,13 @@ import {Component, inject, OnInit} from '@angular/core';
 import {Router} from '@angular/router';
 import {TelegramService} from '../../services/telegram';
 import {AuthService} from '../../auth/auth-service';
-import {JsonPipe, NgIf} from '@angular/common';
+import {NgIf} from '@angular/common';
 import {environment} from '../../../environments/environment';
 
 @Component({
   selector: 'app-app-login',
   imports: [
-    NgIf,
-    JsonPipe
+    NgIf
   ],
   templateUrl: './app-login.html',
   styleUrl: './app-login.css'
@@ -72,5 +71,4 @@ export class AppLogin implements OnInit {
   }
 
   protected readonly environment = environment;
-  protected readonly sessionStorage = sessionStorage;
 }
