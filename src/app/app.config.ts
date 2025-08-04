@@ -13,12 +13,13 @@ import {initializeTelegram} from './auth/app-initializer';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideBrowserGlobalErrorListeners(),
-    provideZoneChangeDetection({ eventCoalescing: true }),
-    provideRouter(routes, withHashLocation()),
     provideHttpClient(
       withInterceptors([authTokenInterceptor])
     ),
+    provideBrowserGlobalErrorListeners(),
+    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideRouter(routes, withHashLocation()),
+
     {
       provide: APP_INITIALIZER,
       useFactory: initializeTelegram,
