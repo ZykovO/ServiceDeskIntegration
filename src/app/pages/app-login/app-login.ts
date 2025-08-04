@@ -37,11 +37,11 @@ export class AppLogin implements OnInit {
       const initData = this.telegramService.initData;
       const initDataUnsafe = this.telegramService.initDataUnsafe;
 
-      // this.isTelegramAvailable = !!(initData && initDataUnsafe?.user);
-      //
-      // if (!this.isTelegramAvailable) {
-      //   this.errorMessage = 'Откройте приложение из Telegram';
-      // }
+      this.isTelegramAvailable = !!(initData && initDataUnsafe?.user);
+
+      if (!this.isTelegramAvailable) {
+        this.errorMessage = 'Откройте приложение из Telegram';
+      }
     } catch (error) {
       console.error('Telegram check error:', error);
       this.isTelegramAvailable = false;
