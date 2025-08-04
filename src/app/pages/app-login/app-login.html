@@ -1,7 +1,7 @@
 <div class="login-container">
   <h2>Вход в приложение</h2>
   <p>{{environment.apiUrl}}</p>
-  <code>{{sessionStorage | json}}</code>
+  <pre>{{sessionStorage | json}}</pre>
   <div *ngIf="isLoading" class="loading">
     Авторизация...
   </div>

@@ -40,7 +40,7 @@ export const canActivateAuth = () => {
         return true;
       } else {
         // Если авторизация через Telegram не удалась, перенаправляем на логин
-        // router.navigate(['/login']);
+        router.navigate(['/login']);
         return false;
       }
     }),
