@@ -51,49 +51,56 @@ export class AuthService {
     return !!this.token;
   }
 
+
+  get initData(): string {
+    return (window as any).Telegram?.WebApp?.initData || '';
+  }
+
+  get initDataUnsafe(): any {
+    return (window as any).Telegram?.WebApp?.initDataUnsafe || null;
+  }
+  ready(): void {
+    (window as any).Telegram?.WebApp?.ready();
+  }
+
+
   // Новый метод для авторизации через Telegram
   authenticateWithTelegram(): Observable<boolean> {
+    console.log('Starting Telegram authentication...');
+
     try {
-      // Получаем данные из Telegram
       const initData = this.telegramService.initData;
       const initDataUnsafe = this.telegramService.initDataUnsafe;
+
+      console.log('Telegram initData:', initData);
+      console.log('Telegram initDataUnsafe:', initDataUnsafe);
 
       if (!initData || !initDataUnsafe?.user) {
         console.error('Telegram data not available');
         return of(false);
       }
 
-      // Определяем базовый URL API (можно вынести в конфигурацию)
       this.baseApiUrl = this.getBaseApiUrl();
+      console.log('API URL:', this.baseApiUrl);
 
-      // Отправляем данные на бэкенд для получения токена
+      const requestData = {
+        initData: initData,
+        user: initDataUnsafe.user
+      };
+      console.log('Sending request:', requestData);
+
       return this.http.post<TokenResponse>(
         `${this.baseApiUrl}/auth/telegram/`,
-        {
-          initData: initData,
-          user: initDataUnsafe.user
-        }
+        requestData
       ).pipe(
         tap(response => {
-          // Сохраняем полученные токены и данные пользователя
-          this.token = response.access;
-          this.refresh = response.refresh;
-          this.user = response.user;
-
-          // Сохраняем в sessionStorage
-          const authParams = {
-            accessToken: response.access,
-            refreshToken: response.refresh,
-            baseApiUrl: this.baseApiUrl,
-            userId: response.user.id,
-            username: response.user.username
-          };
-          sessionStorage.setItem('telegram_auth', JSON.stringify(authParams));
+          console.log('Authentication successful:', response);
+          // ... остальной код
         }),
-        map(() => true), // Преобразуем TokenResponse в boolean
+        map(() => true),
         catchError(error => {
           console.error('Telegram authentication failed:', error);
-          return of(false); // Возвращаем false при ошибке
+          return of(false);
         })
       );
     } catch (error) {
