@@ -15,7 +15,7 @@ import {environment} from '../../../environments/environment';
 })
 export class AppLogin implements OnInit {
   private authService = inject(AuthService);
-  private telegramService = inject(TelegramService);
+  protected telegramService = inject(TelegramService);
   private router = inject(Router);
 
   isLoading = false;
