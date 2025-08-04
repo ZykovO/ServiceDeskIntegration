@@ -19,10 +19,10 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(
       withInterceptors([authTokenInterceptor])
     ),
-    // {
-    //   provide: APP_INITIALIZER,
-    //   useFactory: initializeTelegram,
-    //   multi: true
-    // }
+    {
+      provide: APP_INITIALIZER,
+      useFactory: initializeTelegram,
+      multi: true
+    }
   ]
 };
