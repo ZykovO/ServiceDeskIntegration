@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://127.0.0.1:3030/miniApp',
+  apiUrl: 'http://localhost:3030/miniApp',
 };
