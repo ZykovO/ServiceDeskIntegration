@@ -11,7 +11,6 @@ export const canActivateAuth = () => {
   const urlParams = new URLSearchParams(window.location.search);
   const accessToken = urlParams.get('accessToken');
 
-  // Оборачиваем всё в Observable
   return of(accessToken).pipe(
     switchMap(tokenFromUrl => {
       if (tokenFromUrl && !authService.isAuth()) {
@@ -20,8 +19,16 @@ export const canActivateAuth = () => {
           refreshToken: urlParams.get('refreshToken'),
           baseApiUrl: urlParams.get('baseApiUrl'),
           userId: urlParams.get('userId'),
-          username: urlParams.get('username')
+          username: urlParams.get('username'),
+          // Добавляем недостающие поля
+          id: Number(urlParams.get('userId')),
+          first_name: urlParams.get('first_name') || '',
+          last_name: urlParams.get('last_name') || '',
+          language_code: urlParams.get('language_code') || 'en',
+          allows_write_to_pm: urlParams.get('allows_write_to_pm') === 'true',
+          photo_url: urlParams.get('photo_url') || ''
         };
+
         authService.initializeFromTelegram(params);
 
         // Очищаем URL
@@ -38,6 +45,7 @@ export const canActivateAuth = () => {
       return authService.authenticateWithTelegram().pipe(
         map(success => {
           if (!success) {
+            console.log('Authentication failed, redirecting to login');
             router.navigate(['/login']);
           }
           return success;

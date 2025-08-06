@@ -1,7 +1,6 @@
 import { DOCUMENT } from '@angular/common';
 import { Inject, Injectable } from '@angular/core';
 
-// интерфейс для функционала кнопок
 interface TgButton {
   show(): void;
   hide(): void;
@@ -16,36 +15,61 @@ interface TgButton {
   providedIn: 'root',
 })
 export class TelegramService {
-  private window;
-  tg;
+  private window: any;
+  tg: any;
 
-  // @ts-ignore
-  constructor(@Inject(DOCUMENT) private _document) {
+  constructor(@Inject(DOCUMENT) private _document: Document) {
     this.window = this._document.defaultView;
-    this.tg = this.window.Telegram.WebApp;
+    console.log('TelegramService constructor - window available:', !!this.window);
+    console.log('Telegram object available:', !!this.window?.Telegram);
+    console.log('WebApp available:', !!this.window?.Telegram?.WebApp);
+
+    if (this.window?.Telegram?.WebApp) {
+      this.tg = this.window.Telegram.WebApp;
+      console.log('Telegram WebApp initialized');
+    } else {
+      console.warn('Telegram WebApp not available');
+    }
   }
 
   get MainButton(): TgButton {
-    return this.tg.MainButton;
+    return this.tg?.MainButton;
   }
 
   get BackButton(): TgButton {
-    return this.tg.BackButton;
+    return this.tg?.BackButton;
   }
 
   get initData(): string {
-    return this.tg.initData;
+    const data = this.tg?.initData || '';
+    console.log('initData:', data ? 'available' : 'empty');
+    return data;
   }
 
   get initDataUnsafe(): any {
-    return this.tg.initDataUnsafe; // объект с user, chat, etc
+    const data = this.tg?.initDataUnsafe;
+    console.log('initDataUnsafe:', data ? 'available' : 'empty');
+    console.log('initDataUnsafe content:', data);
+    return data;
   }
 
   sendData(data: object) {
-    this.tg.sendData(JSON.stringify(data));
+    if (this.tg) {
+      this.tg.sendData(JSON.stringify(data));
+    }
   }
 
   ready() {
-    this.tg.ready();
+    if (this.tg) {
+      console.log('Calling Telegram WebApp ready()');
+      this.tg.ready();
+    } else {
+      console.warn('Cannot call ready() - Telegram WebApp not available');
+    }
+  }
+
+  // Дополнительный метод для проверки доступности
+  isAvailable(): boolean {
+    return !!this.tg;
   }
 }

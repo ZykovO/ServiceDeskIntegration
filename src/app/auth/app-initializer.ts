@@ -1,24 +1,22 @@
-// app-initializer.ts
-import { inject } from '@angular/core';
-import {TelegramService} from '../services/telegram';
-
+import { TelegramService } from '../services/telegram';
 
 export function initializeTelegram() {
-  return () => {
-    const telegramService = inject(TelegramService);
-
-    try {
-      // Инициализируем Telegram WebApp
-      telegramService.ready();
-
-      // Настраиваем кнопки при необходимости
-      // telegramService.BackButton.show();
-
-      console.log('Telegram WebApp initialized successfully');
-      return Promise.resolve();
-    } catch (error) {
-      console.error('Failed to initialize Telegram WebApp:', error);
-      return Promise.resolve(); // Не блокируем загрузку приложения
-    }
+  return (telegramService: TelegramService) => {
+    return new Promise<void>((resolve) => {
+      try {
+        // Проверяем, доступен ли Telegram WebApp
+        // @ts-ignore
+        if (typeof window !== 'undefined' && window.Telegram?.WebApp) {
+          telegramService.ready();
+          console.log('Telegram WebApp initialized successfully');
+        } else {
+          console.warn('Telegram WebApp not available');
+        }
+        resolve();
+      } catch (error) {
+        console.error('Failed to initialize Telegram WebApp:', error);
+        resolve(); // Не блокируем загрузку приложения
+      }
+    });
   };
 }
