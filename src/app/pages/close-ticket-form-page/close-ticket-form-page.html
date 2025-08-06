@@ -1,1 +1,94 @@
-<code>{{ticket|json}}</code>
+<div *ngIf="loading" class="telegram-loading">Завантаження...</div>
+<div *ngIf="error" class="telegram-error">
+  {{ error }}
+  <button class="telegram-button secondary" (click)="goBack()" style="margin-top: 12px;">
+    Повернутись
+  </button>
+</div>
+
+<div *ngIf="requestData && !loading" class="telegram-card">
+  <div class="card-header">
+    <h2 class="card-title">Закриття заявки</h2>
+    <button class="telegram-button secondary small" (click)="goBack()">
+      Назад
+    </button>
+  </div>
+
+  <div class="card-section">
+    <h3 class="section-title">Інформація про запит</h3>
+
+    <div class="info-item">
+      <span class="info-label">Contractor ID:</span>
+      <span class="info-value">{{ requestData.contractor_id }}</span>
+    </div>
+
+    <div class="info-item">
+      <span class="info-label">Equipment Repair:</span>
+      <span class="info-value">{{ requestData.equipment_repair || 'Не указано' }}</span>
+    </div>
+
+    <div class="info-item">
+      <span class="info-label">Problem Description:</span>
+      <span class="info-value">{{ requestData.problem_description || 'Не указано' }}</span>
+    </div>
+
+    <div class="info-item">
+      <span class="info-label">Incoming TTN:</span>
+      <span class="info-value">{{ requestData.incoming_ttn || 'Не указано' }}</span>
+    </div>
+
+    <div class="info-item">
+      <span class="info-label">Text:</span>
+      <span class="info-value">{{ requestData.text || 'Не указано' }}</span>
+    </div>
+
+    <div class="info-item">
+      <span class="info-label">Ticket ID:</span>
+      <span class="info-value">{{ requestData.ticket_id }}</span>
+    </div>
+
+    <div class="info-item">
+      <span class="info-label">Client ID:</span>
+      <span class="info-value">{{ requestData.client_id }}</span>
+    </div>
+
+    <div class="info-item">
+      <span class="info-label">Ticket Type:</span>
+      <span class="info-value">{{ requestData.ticket_type }}</span>
+    </div>
+
+    <div class="info-item">
+      <span class="info-label">Additional Number:</span>
+      <span class="info-value">{{ requestData.additional_number || 'Не указано' }}</span>
+    </div>
+
+    <div class="info-item">
+      <span class="info-label">Act Type:</span>
+      <span class="info-value">{{ requestData.act_type }}</span>
+    </div>
+  </div>
+
+
+  <div class="card-actions">
+    <button
+      class="telegram-button primary"
+      (click)="submitForm()"
+      [disabled]="loading">
+      {{ loading ? 'Відправка...' : 'Закрити заявку' }}
+    </button>
+
+    <button
+      class="telegram-button secondary"
+      (click)="goBack()">
+      Скасувати
+    </button>
+  </div>
+</div>
+
+<!-- Debug information (remove in production) -->
+<div *ngIf="requestData && !loading" class="debug-section">
+  <details>
+    <summary>Debug Info (JSON)</summary>
+    <pre>{{ requestData | json }}</pre>
+  </details>
+</div>

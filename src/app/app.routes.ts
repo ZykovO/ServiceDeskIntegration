@@ -10,11 +10,16 @@ import {CloseTicketFormPage} from './pages/close-ticket-form-page/close-ticket-f
 export const routes: Routes = [
   {
     path: '', component: AppLayout, canActivate: [canActivateAuth], children: [
-      {path: 'ticket/:id', component: CloseTicketPage},
-      {path: 'ticket/:id/close', component: CloseTicketFormPage},
+
 
     ]
   },
+
+  {path: 'ticket/:id', component: CloseTicketPage},
+  {path: 'ticket/:id/close', component: CloseTicketFormPage},
+
+
+
   {
     path: 'login',
     component: AppLogin

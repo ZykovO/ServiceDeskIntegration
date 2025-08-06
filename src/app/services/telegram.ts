@@ -72,4 +72,11 @@ export class TelegramService {
   isAvailable(): boolean {
     return !!this.tg;
   }
+
+  close(): void {
+    if (this.isAvailable()) {
+      this.tg.close();
+    }
+  }
+
 }

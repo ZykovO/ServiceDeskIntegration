@@ -46,33 +46,13 @@
     </div>
   </div>
 
-<!--  <div class="card-section" *ngIf="ticket.Actions?.length">-->
-<!--    <h3 class="section-title">Дії</h3>-->
-<!--    <div class="action-list">-->
-<!--      <div *ngFor="let action of ticket.Actions" class="action-item">-->
-<!--        <div class="action-header">-->
-<!--          <span class="action-author">{{ action.Autor }}</span>-->
-<!--          <span class="action-date">{{ action.DatetimeAdd }}</span>-->
-<!--        </div>-->
-<!--        <div class="action-text">{{ action.Text }}</div>-->
-<!--      </div>-->
-<!--    </div>-->
-<!--  </div>-->
-
   <div class="card-actions">
-    <!-- Functional buttons will be added here -->
-<!--    @for (ActionsButton of ticket.ActionsButtons.CloseButtons; track ActionsButton.ActType)-->
-<!--    {-->
-<!--      <button class="telegram-button primary">{{ ActionsButton.ActName }}</button>-->
-<!--    }-->
-
     <button
       *ngFor="let ActionsButton of ticket?.ActionsButtons?.CloseButtons"
       class="telegram-button primary"
-      (click)="goToDetailsPage(ticket)"
+      (click)="goToDetailsPage(ticket, ActionsButton.ActType)"
     >
       {{ ActionsButton.ActName }}
     </button>
-
   </div>
 </div>

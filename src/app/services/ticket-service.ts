@@ -14,4 +14,6 @@ export class TicketService {
   get_ticket(ticket_id: number): Observable<Ticket> {
     return this.http.get<Ticket>(`${this.API_URL}/tickets/${ticket_id}`);
   }
+
+
 }
