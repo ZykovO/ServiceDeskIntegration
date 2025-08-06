@@ -11,11 +11,13 @@ import {provideHttpClient, withInterceptors} from '@angular/common/http';
 import {authTokenInterceptor} from './auth/auth.interceptor';
 import {initializeTelegram} from './auth/app-initializer';
 import {TelegramService} from './services/telegram';
+import {errorLoggingInterceptor} from './interceptors/error-logging.interceptor';
+
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideHttpClient(
-      withInterceptors([authTokenInterceptor])
+      withInterceptors([authTokenInterceptor, errorLoggingInterceptor])
     ),
     provideBrowserGlobalErrorListeners(),
     provideZoneChangeDetection({ eventCoalescing: true }),
