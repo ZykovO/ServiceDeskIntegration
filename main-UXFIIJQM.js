@@ -6,7 +6,6 @@ ${n.map((r,o)=>`${o+1}) ${r.toString()}`).join(`
 \u274C HTTP Error
 URL: ${e.url}
 Method: ${e.method}
-Request Body: ${o}
 Status: ${r.status} (${r.statusText})
 Error Message: ${r.message}
 Error Response: ${i}
