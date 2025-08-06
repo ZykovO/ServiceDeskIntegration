@@ -21,7 +21,7 @@ export const errorLoggingInterceptor: HttpInterceptorFn = (req, next)=> {
         // Можно логировать успешные ответы
         // console.log('HTTP Response:', req.url, event);
         notificationService.showError(
-          `Выполнен запрос к ${req.url}`,
+          `Выполнен запрос к ${req.url}.`,
           `Статус: ${event.status}`,
           7000
         );
@@ -38,7 +38,13 @@ export const errorLoggingInterceptor: HttpInterceptorFn = (req, next)=> {
       console.log('Error response:', err.error);
 
       notificationService.showError(
-        `Ошибка запроса к ${req.url}`,
+        `Ошибка запроса к ${req.url}
+        MethodЖ ${req.method}
+        Request body: ${req.body}
+        Error message: ${err.message}
+        Error response: ${err.error}
+
+        `,
         `Статус: ${err.status}`,
         7000
       );
