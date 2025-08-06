@@ -1,13 +1,16 @@
-// auth.interceptor.ts
+// auth.interceptor.ts с NotificationService
 import { HttpHandlerFn, HttpInterceptorFn, HttpRequest } from '@angular/common/http';
 import { inject } from '@angular/core';
 import { AuthService } from './auth-service';
+
 import { BehaviorSubject, catchError, filter, switchMap, tap, throwError } from 'rxjs';
+import {NotificationService} from '../services/notification/notification.service';
 
 let isRefreshing$ = new BehaviorSubject<boolean>(false);
 
 export const authTokenInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
+  const notificationService = inject(NotificationService);
 
   if (!authService.isAuth()) {
     return next(req);
@@ -17,22 +20,31 @@ export const authTokenInterceptor: HttpInterceptorFn = (req, next) => {
   if (!token) return next(req);
 
   if (isRefreshing$.value) {
-    return refreshAndProceed(authService, req, next);
+    return refreshAndProceed(authService, req, next, notificationService);
   }
 
   return next(addToken(req, token)).pipe(
     catchError(err => {
       if (err.status === 401) {
-        return refreshAndProceed(authService, req, next);
+        return refreshAndProceed(authService, req, next, notificationService);
       }
-      return throwError(err);
+
+      // Обрабатываем другие HTTP ошибки
+      handleHttpError(err, notificationService);
+      return throwError(() => err);
     })
   );
 };
 
-const refreshAndProceed = (authService: AuthService, req: HttpRequest<any>, next: HttpHandlerFn) => {
+const refreshAndProceed = (
+  authService: AuthService,
+  req: HttpRequest<any>,
+  next: HttpHandlerFn,
+  notificationService: NotificationService
+) => {
   if (!isRefreshing$.value) {
     isRefreshing$.next(true);
+
     return authService.refreshToken().pipe(
       switchMap(res => {
         return next(addToken(req, res.access)).pipe(
@@ -40,6 +52,10 @@ const refreshAndProceed = (authService: AuthService, req: HttpRequest<any>, next
             isRefreshing$.next(false);
           })
         );
+      }),
+      catchError(err => {
+        isRefreshing$.next(false);
+        return throwError(() => err);
       })
     );
   }
@@ -60,4 +76,58 @@ const addToken = (req: HttpRequest<any>, token: string) => {
   return req.clone({
     setHeaders: { Authorization: `Bearer ${token}` }
   });
+};
+
+const handleHttpError = (error: any, notificationService: NotificationService) => {
+  // Игнорируем ошибки авторизации (они обрабатываются отдельно)
+  if (error.status === 401) {
+    return;
+  }
+
+  // Игнорируем запросы к эндпоинтам авторизации
+  if (error.url?.includes('/auth/')) {
+    return;
+  }
+
+  let errorMessage = 'Произошла ошибка при выполнении запроса';
+  let errorTitle = 'Ошибка сети';
+
+  switch (error.status) {
+    case 0:
+      errorMessage = 'Нет соединения с сервером';
+      errorTitle = 'Нет соединения';
+      break;
+    case 403:
+      errorMessage = 'Недостаточно прав для выполнения операции';
+      errorTitle = 'Доступ запрещен';
+      break;
+    case 404:
+      errorMessage = 'Запрашиваемый ресурс не найден';
+      errorTitle = 'Не найдено';
+      break;
+    case 422:
+      errorMessage = 'Некорректные данные в запросе';
+      errorTitle = 'Ошибка валидации';
+      break;
+    case 429:
+      errorMessage = 'Слишком много запросов. Попробуйте позже.';
+      errorTitle = 'Превышен лимит';
+      break;
+    case 500:
+    case 502:
+    case 503:
+    case 504:
+      errorMessage = 'Ошибка сервера. Попробуйте позже.';
+      errorTitle = 'Ошибка сервера';
+      break;
+    default:
+      if (error.error?.message) {
+        errorMessage = error.error.message;
+      }
+  }
+
+  // Показываем уведомление только для серьезных ошибок
+  if (error.status !== 422) { // Не показываем для ошибок валидации
+    notificationService.showError(errorMessage, errorTitle, 5000);
+  }
 };
