@@ -161,7 +161,7 @@ export class AuthService {
           let errorTitle = 'Ошибка авторизации';
 
           if (error.status === 0) {
-            errorMessage = 'Не удается подключиться к серверу. Проверьте интернет-соединение.';
+            errorMessage = `Не удается подключиться к серверу. Проверьте интернет-соединение. ${error}`;
             errorTitle = 'Нет соединения';
           } else if (error.status === 401) {
             errorMessage = 'Неверные данные авторизации';
