@@ -12,44 +12,42 @@ import { tap, catchError } from 'rxjs/operators';
 import { inject } from '@angular/core';
 import { NotificationService } from '../services/notification/notification.service';
 
-export const errorLoggingInterceptor: HttpInterceptorFn = (req, next)=> {
+export const errorLoggingInterceptor: HttpInterceptorFn = (req, next) => {
   const notificationService = inject(NotificationService);
 
   return next(req).pipe(
-    tap((event) => {
-      if (event instanceof HttpResponse) {
-        // Можно логировать успешные ответы
-        // console.log('HTTP Response:', req.url, event);
-        notificationService.showError(
-          `Выполнен запрос к ${req.url}.`,
-          `Статус: ${event.status}`,
-          7000
-        );
+    catchError((err: HttpErrorResponse) => {
+      // Сериализация request body
+      let requestBody: string;
+      try {
+        requestBody = req.body ? JSON.stringify(req.body, null, 2) : 'null';
+      } catch {
+        requestBody = String(req.body);
       }
-    }),
-    catchError(err => {
-      console.error('HTTP Error intercepted:');
-      console.log('URL:', req.url);
-      console.log('Method:', req.method);
-      console.log('Request body:', req.body);
-      console.log('Headers:', req.headers);
-      console.log('Error status:', err.status);
-      console.log('Error message:', err.message);
-      console.log('Error response:', err.error);
 
-      notificationService.showError(
-        `Ошибка запроса к ${req.url}
-        MethodЖ ${req.method}
-        Request body: ${req.body}
-        Error message: ${err.message}
-        Error response: ${err.error}
+      // Сериализация error response
+      let errorResponse: string;
+      try {
+        errorResponse = err.error ? JSON.stringify(err.error, null, 2) : 'null';
+      } catch {
+        errorResponse = String(err.error);
+      }
 
-        `,
-        `Статус: ${err.status}`,
-        7000
-      );
+      const message = `
+❌ HTTP Error
+URL: ${req.url}
+Method: ${req.method}
+Request Body: ${requestBody}
+Status: ${err.status} (${err.statusText})
+Error Message: ${err.message}
+Error Response: ${errorResponse}
+      `;
+
+      console.error(message);
+
+      notificationService.showError(message, 'Ошибка HTTP', 10000);
 
       return throwError(() => err);
     })
-  )
+  );
 };
