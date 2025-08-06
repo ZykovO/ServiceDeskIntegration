@@ -20,25 +20,30 @@ export const errorLoggingInterceptor: HttpInterceptorFn = (req, next)=> {
       if (event instanceof HttpResponse) {
         // Можно логировать успешные ответы
         // console.log('HTTP Response:', req.url, event);
+        notificationService.showError(
+          `Выполнен запрос к ${req.url}`,
+          `Статус: ${event.status}`,
+          7000
+        );
       }
     }),
-    catchError((error: HttpErrorResponse) => {
+    catchError(err => {
       console.error('HTTP Error intercepted:');
       console.log('URL:', req.url);
       console.log('Method:', req.method);
       console.log('Request body:', req.body);
       console.log('Headers:', req.headers);
-      console.log('Error status:', error.status);
-      console.log('Error message:', error.message);
-      console.log('Error response:', error.error);
+      console.log('Error status:', err.status);
+      console.log('Error message:', err.message);
+      console.log('Error response:', err.error);
 
       notificationService.showError(
         `Ошибка запроса к ${req.url}`,
-        `Статус: ${error.status}`,
+        `Статус: ${err.status}`,
         7000
       );
 
-      return throwError(() => error);
+      return throwError(() => err);
     })
-  );
+  )
 };
