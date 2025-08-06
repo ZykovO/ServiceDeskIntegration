@@ -120,7 +120,7 @@ export class AuthService {
       console.log('Making request to:', `${this.baseApiUrl}/auth/telegram/`);
 
       return this.http.post<TokenResponse>(
-        `${this.baseApiUrl}//auth/telegram/`,
+        `${this.baseApiUrl}/auth/telegram/`,
         payload
       ).pipe(
         tap(response => {
