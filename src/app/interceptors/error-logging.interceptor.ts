@@ -37,7 +37,6 @@ export const errorLoggingInterceptor: HttpInterceptorFn = (req, next) => {
 ❌ HTTP Error
 URL: ${req.url}
 Method: ${req.method}
-Request Body: ${requestBody}
 Status: ${err.status} (${err.statusText})
 Error Message: ${err.message}
 Error Response: ${errorResponse}
