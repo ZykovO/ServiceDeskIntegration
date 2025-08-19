@@ -8,6 +8,7 @@ import { PrepareNewRequest } from '../../interfaces/prepare-new-request';
 import { Subscription } from 'rxjs';
 import {TicketFormService} from '../../services/ticket-form-service';
 import {TelegramService} from '../../services/telegram';
+import {PrepareNewFormResponse} from '../../interfaces/preparenew.response.interface';
 
 @Component({
   selector: 'app-close-ticket-form-page',
@@ -22,6 +23,7 @@ export class CloseTicketFormPage implements OnInit, OnDestroy {
   requestData: PrepareNewRequest | null = null;
   loading: boolean = false;
   error: string | null = null;
+  preparenewForm: PrepareNewFormResponse|null = null
 
   private formDataSubscription?: Subscription;
 
@@ -41,6 +43,11 @@ export class CloseTicketFormPage implements OnInit, OnDestroy {
       next: (data) => {
         if (data) {
           this.requestData = data;
+          this.ticketService.get_preparenew(this.requestData).subscribe(
+            { next: (preparenewForm) => {
+              this.preparenewForm=preparenewForm
+              } }
+          )
           this.loading = false;
           console.log('Получены данные из сервиса:', data);
         } else {

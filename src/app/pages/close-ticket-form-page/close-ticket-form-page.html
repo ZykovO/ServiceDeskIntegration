@@ -6,7 +6,7 @@
   </button>
 </div>
 
-<div *ngIf="requestData && !loading" class="telegram-card">
+<div *ngIf="requestData && preparenewForm && !loading" class="telegram-card">
   <div class="card-header">
     <h2 class="card-title">Закриття заявки</h2>
     <button class="telegram-button secondary small" (click)="goBack()">
@@ -17,6 +17,9 @@
   <div class="card-section">
     <h3 class="section-title">Інформація про запит</h3>
 
+    @for (formField of preparenewForm.header; track formField.id) {
+        {{ formField | json }}
+    }
     <div class="info-item">
       <span class="info-label">Contractor ID:</span>
       <span class="info-value">{{ requestData.contractor_id }}</span>
@@ -86,9 +89,11 @@
 </div>
 
 <!-- Debug information (remove in production) -->
-<div *ngIf="requestData && !loading" class="debug-section">
+<div *ngIf="requestData && !loading && preparenewForm" class="debug-section">
   <details>
     <summary>Debug Info (JSON)</summary>
     <pre>{{ requestData | json }}</pre>
+    <pre>{{ preparenewForm | json }}</pre>
+
   </details>
 </div>
