@@ -2,7 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { TicketService } from '../../services/ticket-service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Ticket } from '../../interfaces/ticket.interface';
-import {JsonPipe, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault} from '@angular/common';
+import {JsonPipe, NgClass, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault} from '@angular/common';
 import { PrepareNewRequest } from '../../interfaces/prepare-new-request';
 
 import { Subscription } from 'rxjs';
@@ -21,7 +21,8 @@ import {FormsModule} from '@angular/forms';
   imports: [
     NgIf,
     JsonPipe,
-    FormsModule
+    FormsModule,
+    NgClass
   ],
   templateUrl: './close-ticket-form-page.html',
   styleUrl: './close-ticket-form-page.css'
