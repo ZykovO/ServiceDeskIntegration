@@ -8,13 +8,13 @@ interface BaseFormField {
 // Form Input interface
 export interface FormInput extends BaseFormField {
   value?: string | null;
-  filed_type: 'input';
+  field_type: 'input';
 }
 
 // Form Textarea interface
 export interface FormTextarea extends BaseFormField {
   value?: string | null;
-  filed_type: 'textarea';
+  field_type: 'textarea';
 }
 
 // Form Select Option interface
@@ -30,17 +30,15 @@ export interface FormSelect extends BaseFormField {
   multiple?: boolean;
   disabled?: boolean;
   required?: boolean;
-  filed_type: 'select';
+  field_type: 'select';
 }
 
 // Form File interface
-export interface FormFile {
-  id: string;
-  accept?: string | null; // ".pdf,.doc" или "image/*,application/pdf"
+export interface FormFile extends BaseFormField {
+  accept?: string | null;
   multiple?: boolean;
   disabled?: boolean;
   required?: boolean;
-  placeholder?: string;
   field_type: 'file';
 }
 

@@ -18,8 +18,67 @@
     <h3 class="section-title">Інформація про запит</h3>
 
     @for (formField of preparenewForm.header; track formField.id) {
-        {{ formField | json }}
+      <label [for]="formField.id" class="info-label">{{ formField.placeholder }}</label>
+
+      <div class="info-item">
+        @switch (formField.field_type) {
+
+          @case ('input') {
+            <input [id]="formField.id"
+                   type="text"
+                   [placeholder]="formField.placeholder"
+                   [readonly]="formField.readonly"
+                   [(ngModel)]="formField.value" />
+          }
+
+          @case ('textarea') {
+            <textarea [id]="formField.id"
+                      [placeholder]="formField.placeholder"
+                      [readonly]="formField.readonly"
+                      [(ngModel)]="formField.value"></textarea>
+          }
+
+          @case ('select') {
+            <select [id]="formField.id"
+                    [multiple]="formField.multiple"
+                    [disabled]="formField.disabled"
+                    [required]="formField.required">
+              @for (option of formField.options; track option.value) {
+                <option [value]="option.value" [selected]="option.selected">
+                  {{ option.text }}
+                </option>
+              }
+            </select>
+          }
+
+          @case ('file') {
+            <input [id]="formField.id"
+                   type="file"
+                   [accept]="formField.accept"
+                   [multiple]="formField.multiple"
+                   [disabled]="formField.disabled"
+                   [required]="formField.required"
+                   [placeholder]="formField.placeholder" />
+          }
+
+          @default {
+            <div>
+              Unsupported field type
+            </div>
+          }
+
+        }
+      </div>
+
+      <div class="debug-section">
+        <details>
+          <summary>Debug Info (JSON)</summary>
+          <pre>{{ formField | json }}</pre>
+        </details>
+      </div>
     }
+
+
     <div class="info-item">
       <span class="info-label">Contractor ID:</span>
       <span class="info-value">{{ requestData.contractor_id }}</span>

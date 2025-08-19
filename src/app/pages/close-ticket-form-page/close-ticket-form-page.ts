@@ -2,19 +2,29 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { TicketService } from '../../services/ticket-service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Ticket } from '../../interfaces/ticket.interface';
-import { JsonPipe, NgIf } from '@angular/common';
+import {JsonPipe, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault} from '@angular/common';
 import { PrepareNewRequest } from '../../interfaces/prepare-new-request';
 
 import { Subscription } from 'rxjs';
 import {TicketFormService} from '../../services/ticket-form-service';
 import {TelegramService} from '../../services/telegram';
-import {PrepareNewFormResponse} from '../../interfaces/preparenew.response.interface';
+import {
+  FormField, FormFile,
+  FormInput, FormSelect, FormSelectOption,
+  FormTextarea,
+  PrepareNewFormResponse
+} from '../../interfaces/preparenew.response.interface';
+import {FormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-close-ticket-form-page',
   imports: [
     NgIf,
-    JsonPipe
+    JsonPipe,
+    NgSwitch,
+    NgSwitchDefault,
+    NgSwitchCase,
+    FormsModule
   ],
   templateUrl: './close-ticket-form-page.html',
   styleUrl: './close-ticket-form-page.css'
@@ -161,5 +171,59 @@ export class CloseTicketFormPage implements OnInit, OnDestroy {
 
     // Проверяем, доступен ли Telegram WebApp API
     this.telegramService.close()
+  }
+
+
+
+
+
+
+
+
+
+
+
+
+  getFieldType(field: FormField): string {
+    // Обрабатываем несоответствие в названиях полей
+    if ('filed_type' in field) {
+      return field.filed_type;
+    }
+    if ('field_type' in field) {
+      return field.field_type;
+    }
+    return 'unknown';
+  }
+
+// Дополнительные helper методы для type guards (опционально)
+  isFormInput(field: FormField): field is FormInput {
+    return this.getFieldType(field) === 'input';
+  }
+
+  isFormTextarea(field: FormField): field is FormTextarea {
+    return this.getFieldType(field) === 'textarea';
+  }
+
+  isFormSelect(field: FormField): field is FormSelect {
+    return this.getFieldType(field) === 'select';
+  }
+
+  isFormFile(field: FormField): field is FormFile {
+    return this.getFieldType(field) === 'file';
+  }
+
+// Альтернативный более безопасный подход с type guards:
+  getInputValue(field: FormField): string {
+    if (this.isFormInput(field) || this.isFormTextarea(field)) {
+      return field.value || '';
+    }
+    return '';
+  }
+
+  getSelectOptions(field: FormField): FormSelectOption[] {
+    if (this.isFormSelect(field)) {
+      return field.options;
+    }
+    return [];
   }
 }
