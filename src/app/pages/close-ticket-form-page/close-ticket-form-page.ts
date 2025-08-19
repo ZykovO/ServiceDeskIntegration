@@ -130,7 +130,9 @@ export class CloseTicketFormPage implements OnInit, OnDestroy {
 
     // Здесь будет вызов API для отправки данных
     // Например: this.ticketService.closeTicket(this.requestData)
-    this.ticketService.get_preparenew(this.requestData)
+    this.ticketService.get_preparenew(this.requestData).subscribe(
+
+    )
     console.log('Отправляем данные:', this.requestData);
 
     // Имитация отправки
