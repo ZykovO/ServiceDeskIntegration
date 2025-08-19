@@ -276,3 +276,32 @@
 .form-file::-webkit-file-upload-button:hover {
   background: var(--tg-theme-secondary-bg-color, #e8e9ea);
 }
+
+
+/* Общий контейнер для строки формы */
+.info-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+  gap: 8px;
+}
+
+/* Для textarea и других "блоковых" */
+.info-item.block {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.info-label {
+  font-weight: 500;
+  color: var(--tg-theme-hint-color, #707579);
+  min-width: 140px;
+  flex-shrink: 0;
+  font-size: 14px;
+}
+
+/* Если блоковый — label будет сверху */
+.info-item.block .info-label {
+  min-width: auto;
+  margin-bottom: 6px;
+}

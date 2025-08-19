@@ -21,51 +21,55 @@
       <label [for]="formField.id" class="info-label">{{ formField.placeholder }}</label>
 
       <div class="info-item">
-        @switch (formField.field_type) {
+        <div class="info-item" [ngClass]="{'block': formField.field_type === 'textarea'}">
+          <label [for]="formField.id" class="info-label">
+            {{ formField.placeholder }}
+          </label>
 
-          @case ('input') {
-            <input [id]="formField.id"
-                   class="form-input"
-                   [type]="formField.type"
-                   [placeholder]="formField.placeholder"
-                   [readonly]="formField.readonly"
-                   [(ngModel)]="formField.value" />
+          @switch (formField.field_type) {
+
+            @case ('input') {
+              <input [id]="formField.id"
+                     class="form-input"
+                     [type]="formField.type"
+                     [readonly]="formField.readonly"
+                     [(ngModel)]="formField.value" />
+            }
+
+            @case ('textarea') {
+              <textarea [id]="formField.id"
+                        class="form-textarea"
+                        [readonly]="formField.readonly"
+                        [(ngModel)]="formField.value"></textarea>
+            }
+
+            @case ('select') {
+              <select [id]="formField.id"
+                      class="form-select"
+                      [multiple]="formField.multiple"
+                      [disabled]="formField.disabled"
+                      [required]="formField.required">
+                @for (option of formField.options; track option.value) {
+                  <option [value]="option.value" [selected]="option.selected">
+                    {{ option.text }}
+                  </option>
+                }
+              </select>
+            }
+
+            @case ('file') {
+              <input [id]="formField.id"
+                     type="file"
+                     class="form-file"
+                     [accept]="formField.accept"
+                     [multiple]="formField.multiple"
+                     [disabled]="formField.disabled"
+                     [required]="formField.required" />
+            }
+
           }
+        </div>
 
-          @case ('textarea') {
-            <textarea [id]="formField.id"
-                      class="form-textarea"
-                      [placeholder]="formField.placeholder"
-                      [readonly]="formField.readonly"
-                      [(ngModel)]="formField.value"></textarea>
-          }
-
-          @case ('select') {
-            <select [id]="formField.id"
-                    class="form-select"
-                    [multiple]="formField.multiple"
-                    [disabled]="formField.disabled"
-                    [required]="formField.required">
-              @for (option of formField.options; track option.value) {
-                <option [value]="option.value" [selected]="option.selected">
-                  {{ option.text }}
-                </option>
-              }
-            </select>
-          }
-
-          @case ('file') {
-            <input [id]="formField.id"
-                   type="file"
-                   class="form-file"
-                   [accept]="formField.accept"
-                   [multiple]="formField.multiple"
-                   [disabled]="formField.disabled"
-                   [required]="formField.required"
-                   [placeholder]="formField.placeholder" />
-          }
-
-        }
 
       </div>
 
