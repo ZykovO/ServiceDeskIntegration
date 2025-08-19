@@ -9,6 +9,7 @@ interface BaseFormField {
 export interface FormInput extends BaseFormField {
   value?: string | null;
   field_type: 'input';
+  type: 'text' | 'date' | 'time';
 }
 
 // Form Textarea interface

@@ -214,3 +214,65 @@
     margin-right: 0;
   }
 }
+
+
+
+/* Общий стиль для input/select/file */
+.form-input,
+.form-select,
+.form-file {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--tg-theme-secondary-bg-color, #e1e3e6);
+  border-radius: 8px;
+  font-size: 14px;
+  font-family: inherit;
+  background: var(--tg-theme-bg-color, #ffffff);
+  color: var(--tg-theme-text-color, #000000);
+  box-sizing: border-box;
+  min-height: 44px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.form-input:focus,
+.form-select:focus,
+.form-file:focus {
+  outline: none;
+  border-color: var(--tg-theme-button-color, #2ea6ff);
+  box-shadow: 0 0 0 2px rgba(46, 166, 255, 0.2);
+}
+
+.form-input::placeholder {
+  color: var(--tg-theme-hint-color, #707579);
+}
+
+/* Select */
+.form-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='7' viewBox='0 0 12 7' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1L6 6L11 1' stroke='%23707579' stroke-width='1.5'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 12px;
+  padding-right: 32px;
+}
+
+/* File input */
+.form-file {
+  padding: 10px;
+}
+
+.form-file::-webkit-file-upload-button {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: none;
+  background: var(--tg-theme-secondary-bg-color, #f3f4f5);
+  color: var(--tg-theme-text-color, #000000);
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.form-file::-webkit-file-upload-button:hover {
+  background: var(--tg-theme-secondary-bg-color, #e8e9ea);
+}
