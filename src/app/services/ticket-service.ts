@@ -19,10 +19,10 @@ export class TicketService {
   get_preparenew(requestData: PrepareNewRequest) {
     return this.http.post(`${this.API_URL}/tickets/preparenew`, {
       contractor_id:requestData.contractor_id,
-      ticket_id:requestData.contractor_id,
-      client_id:requestData.contractor_id,
-      ticket_type:requestData.contractor_id,
-      act_type:requestData.contractor_id,
+      ticket_id:requestData.ticket_id,
+      client_id:requestData.client_id,
+      ticket_type:requestData.ticket_type,
+      act_type:requestData.act_type,
     });
   }
 }
