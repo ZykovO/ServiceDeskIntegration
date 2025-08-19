@@ -1,23 +1,39 @@
 <div class="login-container">
-  <h2>Вход в приложение</h2>
-  <p>{{environment.apiUrl}}</p>
-  <div *ngIf="isLoading" class="loading">
-    Авторизация...
-  </div>
+  <p-card styleClass="telegram-login-card">
+    <ng-template pTemplate="header">
+      <div class="text-center py-4">
+        <h2 class="m-0 text-2xl font-semibold">Вход в приложение</h2>
+        <p class="mt-2 mb-0 text-sm text-color-secondary">{{ environment.apiUrl }}</p>
+      </div>
+    </ng-template>
 
-  <div *ngIf="!isLoading && !isTelegramAvailable" class="error">
-    Приложение должно быть открыто из Telegram
-  </div>
+    <ng-template pTemplate="content">
+      <div class="text-center">
+        <p-progressSpinner *ngIf="isLoading"
+                           [style]="{ width: '50px', height: '50px' }"
+                           styleClass="telegram-loading-spinner mb-4">
+        </p-progressSpinner>
 
-  <button
-    *ngIf="!isLoading && isTelegramAvailable"
-    (click)="loginWithTelegram()"
-    class="telegram-login-btn"
-    [disabled]="isLoading">
-    Войти через Telegram
-  </button>
+        <p-message *ngIf="!isLoading && !isTelegramAvailable"
+                   severity="error"
+                   text="Приложение должно быть открыто из Telegram"
+                   styleClass="telegram-error-message mb-4">
+        </p-message>
 
-  <div *ngIf="errorMessage" class="error">
-    {{ errorMessage }}
-  </div>
+        <p-button *ngIf="!isLoading && isTelegramAvailable"
+                  label="Войти через Telegram"
+                  icon="pi pi-telegram"
+                  (onClick)="loginWithTelegram()"
+                  [disabled]="isLoading"
+                  styleClass="telegram-primary-button telegram-login-btn w-full">
+        </p-button>
+
+        <p-message *ngIf="errorMessage"
+                   severity="error"
+                   [text]="errorMessage"
+                   styleClass="telegram-error-message mt-4">
+        </p-message>
+      </div>
+    </ng-template>
+  </p-card>
 </div>

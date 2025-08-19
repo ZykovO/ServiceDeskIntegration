@@ -15,6 +15,18 @@ import {
   PrepareNewFormResponse
 } from '../../interfaces/preparenew.response.interface';
 import {FormsModule} from '@angular/forms';
+import {ProgressSpinner} from 'primeng/progressspinner';
+import {Card} from 'primeng/card';
+import {PrimeTemplate} from 'primeng/api';
+import {Message} from 'primeng/message';
+import {Button} from 'primeng/button';
+import {InputText} from 'primeng/inputtext';
+import {Textarea} from 'primeng/textarea';
+import {Select} from 'primeng/select';
+import {FileUpload} from 'primeng/fileupload';
+import {Accordion} from 'primeng/accordion';
+import {Divider} from 'primeng/divider';
+import { AccordionModule } from 'primeng/accordion';
 
 @Component({
   selector: 'app-close-ticket-form-page',
@@ -22,7 +34,19 @@ import {FormsModule} from '@angular/forms';
     NgIf,
     JsonPipe,
     FormsModule,
-    NgClass
+    AccordionModule,
+    NgClass,
+    ProgressSpinner,
+    Card,
+    PrimeTemplate,
+    Message,
+    Button,
+    InputText,
+    Textarea,
+    Select,
+    FileUpload,
+    Accordion,
+    Divider
   ],
   templateUrl: './close-ticket-form-page.html',
   styleUrl: './close-ticket-form-page.css'

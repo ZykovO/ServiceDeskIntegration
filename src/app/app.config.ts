@@ -12,10 +12,19 @@ import {authTokenInterceptor} from './auth/auth.interceptor';
 import {initializeTelegram} from './auth/app-initializer';
 import {TelegramService} from './services/telegram';
 import {errorLoggingInterceptor} from './interceptors/error-logging.interceptor';
+import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
+import {providePrimeNG} from 'primeng/config';
+import {TelegramPreset} from './app-layout/mypreset';
 
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    provideAnimationsAsync(),
+    providePrimeNG({
+      theme: {
+        preset: TelegramPreset
+      }
+    }),
     provideHttpClient(
       withInterceptors([authTokenInterceptor, errorLoggingInterceptor])
     ),

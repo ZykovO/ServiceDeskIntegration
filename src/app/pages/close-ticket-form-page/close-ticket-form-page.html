@@ -1,101 +1,129 @@
-<div *ngIf="loading" class="telegram-loading">Завантаження...</div>
-<div *ngIf="error" class="telegram-error">
-  {{ error }}
-  <button class="telegram-button secondary" (click)="goBack()" style="margin-top: 12px;">
-    Повернутись
-  </button>
-</div>
+<p-progressSpinner *ngIf="loading" [style]="{ width: '50px', height: '50px' }"
+                   styleClass="telegram-loading-spinner">
+</p-progressSpinner>
 
-<div *ngIf="requestData && preparenewForm && !loading" class="telegram-card">
-  <div class="card-header">
-    <h2 class="card-title">Закриття заявки</h2>
-    <button class="telegram-button secondary small" (click)="goBack()">
-      Назад
-    </button>
-  </div>
+<p-card *ngIf="error" styleClass="telegram-error-card">
+  <ng-template pTemplate="content">
+    <p-message severity="error" [text]="error"></p-message>
+    <p-button label="Повернутись"
+              severity="secondary"
+              (onClick)="goBack()"
+              styleClass="telegram-secondary-button mt-3">
+    </p-button>
+  </ng-template>
+</p-card>
 
-  <div class="card-section">
-    <h3 class="section-title">Інформація про запит</h3>
+<p-card *ngIf="requestData && preparenewForm && !loading"
+        styleClass="telegram-form-card">
 
-    @for (formField of preparenewForm.header; track formField.id) {
-      <div class="info-item">
-        <div class="info-item" [ngClass]="{'block': formField.field_type === 'textarea'}">
-          <label [for]="formField.id" class="info-label">
-            {{ formField.placeholder }}
-          </label>
+  <ng-template pTemplate="header">
+    <div class="flex justify-content-between align-items-center">
+      <h2 class="m-0 text-xl font-semibold">Закриття заявки</h2>
+      <p-button label="Назад"
+                severity="secondary"
+                size="small"
+                (onClick)="goBack()"
+                styleClass="telegram-secondary-button">
+      </p-button>
+    </div>
+  </ng-template>
 
-          @switch (formField.field_type) {
+  <ng-template pTemplate="content">
+    <div class="grid">
+      <div class="col-12">
+        <h3 class="text-base font-medium mb-3 text-color-secondary">
+          Інформація про запит
+        </h3>
 
-            @case ('input') {
-              <input [id]="formField.id"
-                     class="form-input"
-                     [type]="formField.type"
-                     [readonly]="formField.readonly"
-                     [(ngModel)]="formField.value" />
-            }
+        <div class="form-fields">
+          @for (formField of preparenewForm.header; track formField.id) {
+            <div class="field"
+                 [ngClass]="{'field-block': formField.field_type === 'textarea'}">
 
-            @case ('textarea') {
-              <textarea [id]="formField.id"
-                        class="form-textarea"
-                        [readonly]="formField.readonly"
-                        [(ngModel)]="formField.value"></textarea>
-            }
+              <label [for]="formField.id"
+                     class="field-label"
+                     [ngClass]="{'block-label': formField.field_type === 'textarea'}">
+                {{ formField.placeholder }}
+              </label>
 
-            @case ('select') {
-              <select [id]="formField.id"
-                      class="form-select"
-                      [multiple]="formField.multiple"
-                      [disabled]="formField.disabled"
-                      [required]="formField.required">
-                @for (option of formField.options; track option.value) {
-                  <option [value]="option.value" [selected]="option.selected">
-                    {{ option.text }}
-                  </option>
+              @switch (formField.field_type) {
+
+                @case ('input') {
+                  <input [id]="formField.id"
+                         pInputText
+                         [type]="formField.type"
+                         [readonly]="formField.readonly"
+                         [(ngModel)]="formField.value"
+                         styleClass="telegram-input w-full" />
                 }
-              </select>
-            }
 
-            @case ('file') {
-              <input [id]="formField.id"
-                     type="file"
-                     class="form-file"
-                     [accept]="formField.accept"
-                     [multiple]="formField.multiple"
-                     [disabled]="formField.disabled"
-                     [required]="formField.required" />
-            }
+                @case ('textarea') {
+                  <textarea [id]="formField.id"
+                            pInputTextarea
+                            [readonly]="formField.readonly"
+                            [(ngModel)]="formField.value"
+                            [autoResize]="true"
+                            rows="3"
+                            styleClass="telegram-textarea w-full">
+                  </textarea>
+                }
 
+                @case ('select') {
+                  <!-- [multiple]="formField.multiple" -->
+                  <p-select [inputId]="formField.id"
+                            [options]="getSelectOptions(formField)"
+                            optionLabel="text"
+                            optionValue="value"
+
+                            [disabled]="formField.disabled"
+                            [required]="formField.required"
+                            placeholder="Оберіть опцію"
+                            styleClass="telegram-select w-full">
+                  </p-select>
+                }
+
+                @case ('file') {
+                  <!-- [accept]="formField.accept" -->
+                  <p-fileUpload [id]="formField.id"
+                                mode="basic"
+
+                                [multiple]="formField.multiple"
+                                [disabled]="formField.disabled"
+                                [auto]="false"
+                                chooseLabel="Обрати файл"
+                                styleClass="telegram-file-upload w-full">
+                  </p-fileUpload>
+                }
+              }
+            </div>
           }
         </div>
-
-
       </div>
-    }
-  </div>
+    </div>
+  </ng-template>
 
+  <ng-template pTemplate="footer">
+    <div class="flex gap-2 flex-wrap">
+      <p-button [label]="loading ? 'Відправка...' : 'Закрити заявку'"
+                (onClick)="submitForm()"
+                [disabled]="loading"
+                [loading]="loading"
+                styleClass="telegram-primary-button flex-1">
+      </p-button>
 
-  <div class="card-actions">
-    <button
-      class="telegram-button primary"
-      (click)="submitForm()"
-      [disabled]="loading">
-      {{ loading ? 'Відправка...' : 'Закрити заявку' }}
-    </button>
+      <p-button label="Скасувати"
+                severity="secondary"
+                (onClick)="goBack()"
+                styleClass="telegram-secondary-button flex-1">
+      </p-button>
+    </div>
+  </ng-template>
+</p-card>
 
-    <button
-      class="telegram-button secondary"
-      (click)="goBack()">
-      Скасувати
-    </button>
-  </div>
-</div>
-
-<!-- Debug information (remove in production) -->
-<div *ngIf="requestData && !loading && preparenewForm" class="debug-section">
-  <details>
-    <summary>Debug Info (JSON)</summary>
-    <pre>{{ requestData | json }}</pre>
-    <pre>{{ preparenewForm | json }}</pre>
-
-  </details>
-</div>
+<!-- Debug информация -->
+<p-accordion *ngIf="requestData && !loading && preparenewForm"
+             styleClass="telegram-debug-accordion mt-4">
+    <pre class="debug-pre">{{ requestData | json }}</pre>
+    <p-divider></p-divider>
+    <pre class="debug-pre">{{ preparenewForm | json }}</pre>
+</p-accordion>

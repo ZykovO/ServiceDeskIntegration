@@ -5,12 +5,28 @@ import { TicketService } from '../../services/ticket-service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PrepareNewRequest } from '../../interfaces/prepare-new-request';
 import {TicketFormService} from '../../services/ticket-form-service';
+import {ProgressSpinner} from 'primeng/progressspinner';
+import {Message} from 'primeng/message';
+import {Card} from 'primeng/card';
+import {PrimeTemplate} from 'primeng/api';
+import {Tag} from 'primeng/tag';
+import {Divider} from 'primeng/divider';
+import {Button} from 'primeng/button';
+import { AccordionModule } from 'primeng/accordion';
 
 @Component({
   selector: 'app-close-ticket-page',
   imports: [
     NgIf,
     NgForOf,
+    ProgressSpinner,
+    AccordionModule,
+    Message,
+    Card,
+    PrimeTemplate,
+    Tag,
+    Divider,
+    Button,
   ],
   templateUrl: './close-ticket-page.html',
   styleUrl: './close-ticket-page.css'

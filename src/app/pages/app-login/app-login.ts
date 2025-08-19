@@ -4,11 +4,21 @@ import {TelegramService} from '../../services/telegram';
 import {AuthService} from '../../auth/auth-service';
 import {NgIf} from '@angular/common';
 import {environment} from '../../../environments/environment';
+import {Card} from 'primeng/card';
+import {PrimeTemplate} from 'primeng/api';
+import {ProgressSpinner} from 'primeng/progressspinner';
+import {Message} from 'primeng/message';
+import {Button} from 'primeng/button';
 
 @Component({
   selector: 'app-app-login',
   imports: [
-    NgIf
+    NgIf,
+    Card,
+    PrimeTemplate,
+    ProgressSpinner,
+    Message,
+    Button
   ],
   templateUrl: './app-login.html',
   styleUrl: './app-login.css'
