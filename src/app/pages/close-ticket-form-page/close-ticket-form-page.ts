@@ -21,9 +21,6 @@ import {FormsModule} from '@angular/forms';
   imports: [
     NgIf,
     JsonPipe,
-    NgSwitch,
-    NgSwitchDefault,
-    NgSwitchCase,
     FormsModule
   ],
   templateUrl: './close-ticket-form-page.html',
@@ -186,9 +183,6 @@ export class CloseTicketFormPage implements OnInit, OnDestroy {
 
   getFieldType(field: FormField): string {
     // Обрабатываем несоответствие в названиях полей
-    if ('filed_type' in field) {
-      return field.filed_type;
-    }
     if ('field_type' in field) {
       return field.field_type;
     }
