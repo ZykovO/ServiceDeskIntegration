@@ -139,21 +139,21 @@
       </ng-template>
 
       <div class="flex flex-column gap-2">
-        @for (comment of ticket.Comentaries; track comment.LocalId) {
-
-          <p-fieldset legend="{{comment.Author}}" [toggleable]="true">
+        @for (comment of ticket.Comentaries; track comment.LocalId; let i = $index) {
+          <p-fieldset
+            legend="{{comment.Author}}"
+            [toggleable]="true"
+            [collapsed]="i < ticket.Comentaries.length - 2">
 
             <p class="m-0">
               {{ comment.Text }}
             </p>
-            <p class="m-0">{{comment.DatetimeAdd}}</p>
+            <p class="m-0">{{ comment.DatetimeAdd }}</p>
           </p-fieldset>
         }
-
       </div>
-
-
     </p-card>
+
 
     <!-- Кнопки действий -->
     <p-card class="mt-auto shadow-2" *ngIf="ticket?.ActionsButtons">
