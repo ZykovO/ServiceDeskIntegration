@@ -11,6 +11,8 @@ import { Timeline } from 'primeng/timeline';
 import { Button } from 'primeng/button';
 import {PrimeTemplate} from 'primeng/api';
 import {Skeleton} from 'primeng/skeleton';
+import {Message} from 'primeng/message';
+import {Fieldset} from 'primeng/fieldset';
 
 @Component({
   selector: 'app-ticket-view-page',
@@ -25,7 +27,9 @@ import {Skeleton} from 'primeng/skeleton';
     Button,
     PrimeTemplate,
     Skeleton,
-    JsonPipe
+    JsonPipe,
+    Message,
+    Fieldset
   ],
   templateUrl: './ticket-view-page.html',
   styleUrl: './ticket-view-page.css'
@@ -81,27 +85,9 @@ export class TicketViewPage implements OnInit {
     return new Date(deadline) < new Date();
   }
 
-  getFileName(attachment: string): string {
-    return attachment.split('/').pop() || attachment;
-  }
 
-  openAttachment(attachment: string): void {
-    window.open(attachment, '_blank');
-  }
 
-  getActionButtons(): any[] {
-    if (!this.ticket?.ActionsButtons) return [];
-
-    return [{
-      label: 'Закрыть',
-      icon: 'pi pi-times',
-      styleClass: 'p-button-outlined p-button-danger',
-      action: 'close',
-      disabled: false
-    }];
-  }
-
-  executeAction(action: string): void {
+  executeAction(action: number): void {
     console.log('Выполняется действие:', action);
   }
 }

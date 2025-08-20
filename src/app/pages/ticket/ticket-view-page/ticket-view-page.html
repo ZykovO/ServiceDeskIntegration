@@ -21,35 +21,35 @@
       <div class="grid">
         <div class="col-12 md:col-6">
           <div class="field mb-2" *ngIf="ticket?.Customer">
-            <label class="text-sm text-600 font-semibold block mb-1">Заказчик</label>
-            <span class="text-900">{{ ticket?.Customer }}</span>
+            <label class="text-sm text-300 font-semibold block mb-1">Заказчик</label>
+            <span class="text-100">{{ ticket?.Customer }}</span>
           </div>
 
           <div class="field mb-2" *ngIf="ticket?.Shop">
-            <label class="text-sm text-600 font-semibold block mb-1">Магазин</label>
-            <span class="text-900">{{ ticket?.Shop }}</span>
+            <label class="text-sm text-300 font-semibold block mb-1">Магазин</label>
+            <span class="text-100">{{ ticket?.Shop }}</span>
           </div>
 
           <div class="field mb-2" *ngIf="ticket?.Type">
-            <label class="text-sm text-600 font-semibold block mb-1">Тип</label>
-            <span class="text-900">{{ ticket?.Type }}</span>
+            <label class="text-sm text-300 font-semibold block mb-1">Тип</label>
+            <span class="text-100">{{ ticket?.Type }}</span>
           </div>
         </div>
 
         <div class="col-12 md:col-6">
           <div class="field mb-2" *ngIf="ticket?.PerformerName">
-            <label class="text-sm text-600 font-semibold block mb-1">Исполнитель</label>
-            <span class="text-900">{{ ticket?.PerformerName }}</span>
+            <label class="text-sm text-300 font-semibold block mb-1">Исполнитель</label>
+            <span class="text-100">{{ ticket?.PerformerName }}</span>
           </div>
 
           <div class="field mb-2" *ngIf="ticket?.Contractor">
-            <label class="text-sm text-600 font-semibold block mb-1">Подрядчик</label>
-            <span class="text-900">{{ ticket?.Contractor }}</span>
+            <label class="text-sm text-300 font-semibold block mb-1">Подрядчик</label>
+            <span class="text-100">{{ ticket?.Contractor }}</span>
           </div>
 
           <div class="field mb-2" *ngIf="ticket?.ACtStatus">
-            <label class="text-sm text-600 font-semibold block mb-1">Статус АЦТ</label>
-            <span class="text-900">{{ ticket?.ACtStatus }}</span>
+            <label class="text-sm text-300 font-semibold block mb-1">Статус АЦТ</label>
+            <span class="text-100">{{ ticket?.ACtStatus }}</span>
           </div>
         </div>
       </div>
@@ -65,7 +65,7 @@
       </ng-template>
 
       <div class="field mb-2" *ngIf="ticket?.Address">
-        <span class="text-900">{{ ticket?.Address }}</span>
+        <span class="text-100">{{ ticket?.Address }}</span>
       </div>
 
       <div class="flex gap-2 flex-wrap">
@@ -85,26 +85,26 @@
 
       <div class="grid">
         <div class="col-6" *ngIf="ticket?.DateCreate">
-          <label class="text-sm text-600 font-semibold block mb-1">Создана</label>
-          <span class="text-900 text-sm">{{ ticket?.DateCreate | date:'dd.MM.yyyy HH:mm' }}</span>
+          <label class="text-sm text-300 font-semibold block mb-1">Создана</label>
+          <span class="text-100 text-sm">{{ ticket?.DateCreate | date:'dd.MM.yyyy HH:mm' }}</span>
         </div>
 
         <div class="col-6" *ngIf="ticket?.Deadline">
-          <label class="text-sm text-600 font-semibold block mb-1">Срок</label>
-          <span class="text-900 text-sm"
+          <label class="text-sm text-300 font-semibold block mb-1">Срок</label>
+          <span class="text-100 text-sm"
                 [class]="isDeadlineExpired(ticket?.Deadline ?? null) ? 'text-red-500' : 'text-green-500'">
           {{ ticket?.Deadline | date:'dd.MM.yyyy HH:mm' }}
         </span>
         </div>
 
         <div class="col-6" *ngIf="ticket?.DateApprove">
-          <label class="text-sm text-600 font-semibold block mb-1">Утверждена</label>
-          <span class="text-900 text-sm">{{ ticket?.DateApprove | date:'dd.MM.yyyy HH:mm' }}</span>
+          <label class="text-sm text-300 font-semibold block mb-1">Утверждена</label>
+          <span class="text-100 text-sm">{{ ticket?.DateApprove | date:'dd.MM.yyyy HH:mm' }}</span>
         </div>
 
         <div class="col-6" *ngIf="ticket?.DateClose">
-          <label class="text-sm text-600 font-semibold block mb-1">Закрыта</label>
-          <span class="text-900 text-sm">{{ ticket?.DateClose | date:'dd.MM.yyyy HH:mm' }}</span>
+          <label class="text-sm text-300 font-semibold block mb-1">Закрыта</label>
+          <span class="text-100 text-sm">{{ ticket?.DateClose | date:'dd.MM.yyyy HH:mm' }}</span>
         </div>
       </div>
     </p-card>
@@ -115,47 +115,16 @@
         <div class="flex align-items-center gap-2 p-3 border-bottom-1 surface-border">
           <i class="pi pi-file-edit text-primary"></i>
           <span class="font-semibold">Описание работ</span>
+
         </div>
+          <div class="grid col-12 m-1">
+            <span class="text-100 text-sm">{{ ticket?.Text}}</span>
+          </div>
       </ng-template>
 
-      <p-accordion>
-        <!-- при необходимости раскомментировать -->
-        <!--
-        <p-accordionTab header="Описание заявки" *ngIf="ticket?.Text">
-          <p class="line-height-3 m-0 white-space-pre-line">{{ ticket?.Text }}</p>
-        </p-accordionTab>
-
-        <p-accordionTab header="Выполненные работы" *ngIf="ticket?.CompletedWork">
-          <p class="line-height-3 m-0 white-space-pre-line">{{ ticket?.CompletedWork }}</p>
-        </p-accordionTab>
-        -->
-      </p-accordion>
     </p-card>
 
-    <!-- Вложения -->
-    <p-card class="mb-3 shadow-1" *ngIf="ticket?.Attachments?.length">
-      <ng-template pTemplate="header">
-        <div class="flex align-items-center justify-content-between p-3 border-bottom-1 surface-border">
-          <div class="flex align-items-center gap-2">
-            <i class="pi pi-paperclip text-primary"></i>
-            <span class="font-semibold">Вложения</span>
-          </div>
-          <p-chip [label]="ticket?.Attachments?.length?.toString() || '0'" class="bg-blue-500 text-white"></p-chip>
-        </div>
-      </ng-template>
 
-      <div class="flex flex-column gap-2">
-        <div *ngFor="let attachment of ticket?.Attachments"
-             class="flex align-items-center justify-content-between p-2 bg-blue-50 border-round cursor-pointer hover:bg-blue-100 transition-colors transition-duration-150"
-             (click)="openAttachment(attachment)">
-          <div class="flex align-items-center gap-2">
-            <i class="pi pi-file text-blue-600"></i>
-            <span class="text-sm text-900">{{ getFileName(attachment) }}</span>
-          </div>
-          <i class="pi pi-external-link text-blue-600"></i>
-        </div>
-      </div>
-    </p-card>
 
     <!-- Комментарии -->
     <p-card class="mb-3 shadow-1" *ngIf="ticket?.Comentaries?.length">
@@ -165,42 +134,45 @@
             <i class="pi pi-comments text-primary"></i>
             <span class="font-semibold">Комментарии</span>
           </div>
-          <p-chip [label]="ticket?.Comentaries?.length?.toString() || '0'" class="bg-orange-500 text-white"></p-chip>
+          <p-chip [label]="ticket?.Comentaries?.length?.toString() || '0'" class="bg-blue-500 text-white"></p-chip>
         </div>
       </ng-template>
 
-      <p-timeline [value]="ticket?.Comentaries" layout="vertical">
-        <ng-template pTemplate="marker" let-comment>
-          <div class="flex w-2rem h-2rem align-items-center justify-content-center text-white border-round bg-blue-500">
-            <i class="pi pi-user"></i>
-          </div>
-        </ng-template>
+      <div class="flex flex-column gap-2">
+        @for (comment of ticket.Comentaries; track comment.LocalId) {
 
-        <ng-template pTemplate="content" let-comment>
-          <div class="ml-3">
-            <div class="flex justify-content-between align-items-center mb-2">
-              <span class="font-semibold text-primary">{{ comment.author || 'Система' }}</span>
-              <small class="text-600">{{ comment.date | date:'dd.MM.yyyy HH:mm' }}</small>
-            </div>
-            <p class="text-900 line-height-3 white-space-pre-line">{{ comment.text }}</p>
-          </div>
-        </ng-template>
-      </p-timeline>
+          <p-fieldset legend="{{comment.Author}}" [toggleable]="true">
+
+            <p class="m-0">
+              {{ comment.Text }}
+            </p>
+            <p class="m-0">{{comment.DatetimeAdd}}</p>
+          </p-fieldset>
+        }
+
+      </div>
+
+
     </p-card>
 
     <!-- Кнопки действий -->
     <p-card class="mt-auto shadow-2" *ngIf="ticket?.ActionsButtons">
-      <div class="flex flex-column gap-2">
+      <div class="flex align-items-stretch flex-wrap w-full">
         <p-button
-          *ngFor="let button of getActionButtons()"
-          [label]="button.label"
-          [icon]="button.icon"
-          [styleClass]="'w-full ' + button.styleClass"
-          [disabled]="button.disabled"
-          (onClick)="executeAction(button.action)">
+          *ngFor="let button of ticket.ActionsButtons.CloseButtons"
+          [label]="button.ActName"
+          class="flex-1 align-self-auto border-round m-1 col-6"
+          (onClick)="executeAction(button.ActType)">
+        </p-button>
+        <p-button
+          *ngFor="let button of ticket.ActionsButtons.CloseButtons"
+          [label]="button.ActName"
+          class="flex-1 align-self-auto border-round m-1 col-6"
+          (onClick)="executeAction(button.ActType)">
         </p-button>
       </div>
     </p-card>
+
   </div>
 
 
