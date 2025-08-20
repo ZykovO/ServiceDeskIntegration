@@ -13,6 +13,8 @@ import {PrimeTemplate} from 'primeng/api';
 import {Skeleton} from 'primeng/skeleton';
 import {Message} from 'primeng/message';
 import {Fieldset} from 'primeng/fieldset';
+import {StorageService} from '../../../services/local-storage-service';
+
 
 @Component({
   selector: 'app-ticket-view-page',
@@ -21,27 +23,26 @@ import {Fieldset} from 'primeng/fieldset';
     Chip,
     NgIf,
     DatePipe,
-    Accordion,
     NgForOf,
-    Timeline,
     Button,
     PrimeTemplate,
     Skeleton,
-    JsonPipe,
-    Message,
     Fieldset
   ],
   templateUrl: './ticket-view-page.html',
   styleUrl: './ticket-view-page.css'
 })
 export class TicketViewPage implements OnInit {
-  ticket?: Ticket;
+  ticket?: Ticket | null;
   error?: string;
   isLoading = true; // Добавляем локальное состояние загрузки
+  private readonly TICKET_KEY = 'currentTicket';
+  private readonly FORM_KEY = 'currentTicketForm';
 
   constructor(
     private ticketService: TicketService,
     private route: ActivatedRoute,
+    private storage: StorageService
   ) {}
 
   ngOnInit(): void {
@@ -58,16 +59,26 @@ export class TicketViewPage implements OnInit {
       this.isLoading = false;
       return;
     }
+    if (this.getCurrentTicket()) {
+      this.ticket = this.getCurrentTicket();
+      console.log(this.ticket);
+      this.isLoading = false;
+      return;
+    }
 
     this.ticketService.get_ticket(ticketId)
       .pipe(
         finalize(() => {
           this.isLoading = false;
+          if (this.ticket) {
+            this.saveTicket(this.ticket);
+          }
         })
       )
       .subscribe({
         next: (data) => {
           this.ticket = data;
+
           console.log(data)
           this.error = undefined;
         },
@@ -89,5 +100,21 @@ export class TicketViewPage implements OnInit {
 
   executeAction(action: number): void {
     console.log('Выполняется действие:', action);
+  }
+
+
+  saveTicket(ticket: Ticket): void {
+    this.storage.set(this.TICKET_KEY, ticket);
+  }
+
+  getCurrentTicket(): Ticket | null {
+    return this.storage.get<Ticket>(this.TICKET_KEY);
+  }
+  saveTicketForm(formData: FormData): void {
+    this.storage.set(this.FORM_KEY, formData);
+  }
+
+  getCurrentTicketForm(): Ticket | null {
+    return this.storage.get<Ticket>(this.FORM_KEY);
   }
 }
