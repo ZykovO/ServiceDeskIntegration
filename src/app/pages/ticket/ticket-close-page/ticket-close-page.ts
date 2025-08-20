@@ -5,16 +5,32 @@ import {TicketService} from '../../../services/ticket-service';
 import {ActivatedRoute} from '@angular/router';
 import {JsonPipe} from '@angular/common';
 import {PrepareNewRequest} from '../../../interfaces/prepare-new-request';
-import {PrepareNewFormResponse} from '../../../interfaces/preparenew.response.interface';
+import {
+  FormField,
+  FormSelect,
+  FormSelectOption,
+  PrepareNewFormResponse
+} from '../../../interfaces/preparenew.response.interface';
 import {Skeleton} from 'primeng/skeleton';
 import {Message} from 'primeng/message';
+import {FileUpload} from 'primeng/fileupload';
+import {InputText} from 'primeng/inputtext';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {Select} from 'primeng/select';
+import {Textarea} from 'primeng/textarea';
 
 @Component({
   selector: 'app-ticket-close-page',
   imports: [
     JsonPipe,
     Skeleton,
-    Message
+    Message,
+    FileUpload,
+    InputText,
+    ReactiveFormsModule,
+    Select,
+    Textarea,
+    FormsModule
   ],
   templateUrl: './ticket-close-page.html',
   styleUrl: './ticket-close-page.css'
@@ -83,5 +99,20 @@ export class TicketClosePage implements OnInit {
   getCurrentTicket(): Ticket | null {
     return this.storage.get<Ticket>(this.TICKET_KEY);
   }
-
+  getFieldType(field: FormField): string {
+    // Обрабатываем несоответствие в названиях полей
+    if ('field_type' in field) {
+      return field.field_type;
+    }
+    return 'unknown';
+  }
+  isFormSelect(field: FormField): field is FormSelect {
+    return this.getFieldType(field) === 'select';
+  }
+  getSelectOptions(field: FormField): FormSelectOption[] {
+    if (this.isFormSelect(field)) {
+      return field.options;
+    }
+    return [];
+  }
 }

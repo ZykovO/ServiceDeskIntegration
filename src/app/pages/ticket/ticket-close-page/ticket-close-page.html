@@ -1,8 +1,54 @@
 @if (!this.isLoading && formFields) {
-  @for (field of formFields.header; track field.id) {
-    <p-message>
-      {{field.placeholder}}
-    </p-message>
+  @for (formField of formFields.header; track formField.id) {
+    @switch (formField.field_type) {
+
+      @case ('input') {
+        <input [id]="formField.id"
+               pInputText
+               [type]="formField.type"
+               [readonly]="formField.readonly"
+               [(ngModel)]="formField.value"
+               styleClass="telegram-input w-full" />
+      }
+
+      @case ('textarea') {
+        <textarea [id]="formField.id"
+                  pInputTextarea
+                  [readonly]="formField.readonly"
+                  [(ngModel)]="formField.value"
+                  [autoResize]="true"
+                  rows="3"
+                  styleClass="telegram-textarea w-full">
+                  </textarea>
+      }
+
+      @case ('select') {
+        <!-- [multiple]="formField.multiple" -->
+        <p-select [inputId]="formField.id"
+                  [options]="getSelectOptions(formField)"
+                  optionLabel="text"
+                  optionValue="value"
+
+                  [disabled]="formField.disabled"
+                  [required]="formField.required"
+                  placeholder="Оберіть опцію"
+                  styleClass="telegram-select w-full">
+        </p-select>
+      }
+
+      @case ('file') {
+        <!-- [accept]="formField.accept" -->
+        <p-fileUpload [id]="formField.id"
+                      mode="basic"
+
+                      [multiple]="formField.multiple"
+                      [disabled]="formField.disabled"
+                      [auto]="false"
+                      chooseLabel="Обрати файл"
+                      styleClass="telegram-file-upload w-full">
+        </p-fileUpload>
+      }
+    }
   }
 
 } @else {
