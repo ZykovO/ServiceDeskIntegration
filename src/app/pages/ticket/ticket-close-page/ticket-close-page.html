@@ -60,13 +60,14 @@
             </div>
             <div class="flex-1">
               <label class="text-xs text-300 font-semibold block mb-1">{{ formFields.header.performer_ids.placeholder }}</label>
-              <p-multi-select
-                [options]="formFields.header.performer_ids.options"
-                optionLabel="text"
-                optionValue="value"
-                styleClass="w-full"
-                [style]="{'width': '100%', 'font-size': '0.875rem'}">
-              </p-multi-select>
+              <div class="relative">
+                <p-multi-select
+                  [options]="formFields.header.performer_ids.options"
+                  optionLabel="text"
+                  optionValue="value"
+                  styleClass="w-full">
+                </p-multi-select>
+              </div>
             </div>
           </div>
         </div>

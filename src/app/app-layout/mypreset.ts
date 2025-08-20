@@ -536,7 +536,6 @@ export const TelegramPreset = definePreset(Aura, {
       },
       subtitle: {
         color: '{text.muted.color}',
-        // fontSize: '14px'
       }
     },
 
@@ -547,30 +546,13 @@ export const TelegramPreset = definePreset(Aura, {
         paddingX: '16px',
         paddingY: '12px',
         gap: '8px',
-        // fontWeight: '500',
-        // fontSize: '14px',
         transitionDuration: '{transition.duration}',
         focusRing: {
           width: '2px',
           style: 'solid',
-          // color: '{primary.color}',
           offset: '2px',
-          // shadow: 'none'
         }
       },
-      // label: {
-      //   fontWeight: '500'
-      // },
-      // sm: {
-      //   fontSize: '13px',
-      //   paddingX: '12px',
-      //   paddingY: '8px'
-      // },
-      // lg: {
-      //   fontSize: '16px',
-      //   paddingX: '20px',
-      //   paddingY: '16px'
-      // }
     },
 
     // Поля ввода в стиле Telegram
@@ -587,8 +569,6 @@ export const TelegramPreset = definePreset(Aura, {
         color: '{form.field.color}',
         disabledColor: '{form.field.disabled.color}',
         placeholderColor: '{form.field.placeholder.color}',
-        // fontSize: '14px',
-        // fontFamily: 'inherit',
         borderRadius: '8px',
         paddingX: '12px',
         paddingY: '12px',
@@ -617,8 +597,6 @@ export const TelegramPreset = definePreset(Aura, {
         color: '{form.field.color}',
         disabledColor: '{form.field.disabled.color}',
         placeholderColor: '{form.field.placeholder.color}',
-        // fontSize: '14px',
-        // fontFamily: 'inherit',
         borderRadius: '8px',
         paddingX: '12px',
         paddingY: '12px',
@@ -633,7 +611,7 @@ export const TelegramPreset = definePreset(Aura, {
       }
     },
 
-    // Select в стиле Telegram
+    // Select в стиле Telegram - ИСПРАВЛЕНО
     select: {
       root: {
         background: '{form.field.background}',
@@ -645,8 +623,6 @@ export const TelegramPreset = definePreset(Aura, {
         color: '{form.field.color}',
         disabledColor: '{form.field.disabled.color}',
         placeholderColor: '{form.field.placeholder.color}',
-        // fontSize: '14px',
-        // fontFamily: 'inherit',
         borderRadius: '8px',
         paddingX: '12px',
         paddingY: '12px',
@@ -664,11 +640,112 @@ export const TelegramPreset = definePreset(Aura, {
         color: '{form.field.icon.color}'
       },
       overlay: {
-        background: '{overlay.select.background}',
-        borderColor: '{overlay.select.border.color}',
+        background: '{content.background}',
+        borderColor: '{content.border.color}',
         borderRadius: '8px',
-        color: '{overlay.select.color}',
-        shadow: '{overlay.select.shadow}'
+        color: '{content.color}',
+        shadow: '0 4px 12px rgba(0,0,0,0.15)'
+      },
+      list: {
+        padding: '4px',
+        gap: '2px'
+      },
+      option: {
+        focusBackground: '{list.option.focus.background}',
+        selectedBackground: '{list.option.selected.background}',
+        selectedFocusBackground: '{list.option.selected.focus.background}',
+        color: '{list.option.color}',
+        focusColor: '{list.option.focus.color}',
+        selectedColor: '{list.option.selected.color}',
+        selectedFocusColor: '{list.option.selected.focus.color}',
+        padding: '8px 12px',
+        borderRadius: '6px'
+      },
+      optionGroup: {
+        background: 'transparent',
+        color: '{text.muted.color}',
+        fontWeight: '600',
+        padding: '8px 12px'
+      },
+      checkmark: {
+        color: '{list.option.color}',
+        gutterStart: '8px',
+        gutterEnd: '8px'
+      },
+      emptyMessage: {
+        padding: '8px 12px',
+        // background: 'transparent',
+        // color: '{text.muted.color}'
+      }
+    },
+
+    // MultiSelect в стиле Telegram - ДОБАВЛЕНО
+    multiselect: {
+      root: {
+        background: '{form.field.background}',
+        disabledBackground: '{form.field.disabled.background}',
+        borderColor: '{form.field.border.color}',
+        hoverBorderColor: '{form.field.hover.border.color}',
+        focusBorderColor: '{form.field.focus.border.color}',
+        invalidBorderColor: '{form.field.invalid.border.color}',
+        color: '{form.field.color}',
+        disabledColor: '{form.field.disabled.color}',
+        placeholderColor: '{form.field.placeholder.color}',
+        borderRadius: '8px',
+        paddingX: '12px',
+        paddingY: '12px',
+        transitionDuration: '{transition.duration}',
+        focusRing: {
+          width: '2px',
+          style: 'solid',
+          color: 'rgba(46, 166, 255, 0.2)',
+          offset: '0',
+          shadow: 'none'
+        }
+      },
+      dropdown: {
+        width: '32px',
+        color: '{form.field.icon.color}'
+      },
+      overlay: {
+        background: '{content.background}',
+        borderColor: '{content.border.color}',
+        borderRadius: '8px',
+        color: '{content.color}',
+        shadow: '0 4px 12px rgba(0,0,0,0.15)'
+      },
+      list: {
+        padding: '4px',
+        gap: '2px'
+      },
+      option: {
+        focusBackground: '{list.option.focus.background}',
+        selectedBackground: '{list.option.selected.background}',
+        selectedFocusBackground: '{list.option.selected.focus.background}',
+        color: '{list.option.color}',
+        focusColor: '{list.option.focus.color}',
+        selectedColor: '{list.option.selected.color}',
+        selectedFocusColor: '{list.option.selected.focus.color}',
+        padding: '8px 12px',
+        borderRadius: '6px'
+      },
+      optionGroup: {
+        background: 'transparent',
+        color: '{text.muted.color}',
+        fontWeight: '600',
+        padding: '8px 12px'
+      },
+      chip: {
+        borderRadius: '16px',
+        // paddingX: '8px',
+        // paddingY: '4px',
+        // background: '{primary.color}',
+        // color: '{primary.inverse.color}'
+      },
+      emptyMessage: {
+        padding: '8px 12px',
+        // background: 'transparent',
+        // color: '{text.muted.color}'
       }
     },
 
@@ -698,13 +775,6 @@ export const TelegramPreset = definePreset(Aura, {
         padding: '8px 12px',
         borderRadius: '6px'
       },
-      // arrow: {
-      //   size: '8px'
-      // },
-      // text: {
-      //   fontSize: '12px',
-      //   fontWeight: '500'
-      // }
     },
 
     // Меню
@@ -726,16 +796,8 @@ export const TelegramPreset = definePreset(Aura, {
         padding: '8px 12px',
         gap: '8px'
       },
-      // itemLabel: {
-      //   fontSize: '14px',
-      //   fontWeight: '500'
-      // },
-      // itemIcon: {
-      //   color: '{navigation.item.icon.color}'
-      // },
       separator: {
         borderColor: '{content.border.color}',
-        // margin: '4px 0'
       }
     }
   }
