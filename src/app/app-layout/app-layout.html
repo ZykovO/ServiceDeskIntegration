@@ -1,9 +1,12 @@
+<!-- app-layout.html -->
 <div class="p-2 h-screen">
-  <ng-container *ngIf="!(isLoading); else loadingTpl">
-    <router-outlet></router-outlet>
-  </ng-container>
+  <router-outlet></router-outlet>
+<!--  -->
+<!--  <ng-container *ngIf="!(isLoadingState.isLoading$ | async); else loadingTpl">-->
+<!--    -->
+<!--  </ng-container>-->
 
-  <ng-template #loadingTpl>
-    <p-skeleton class="w-full h-full"></p-skeleton>
-  </ng-template>
+<!--  <ng-template #loadingTpl>-->
+<!--    <p-skeleton class="w-full h-full"></p-skeleton>-->
+<!--  </ng-template>-->
 </div>
