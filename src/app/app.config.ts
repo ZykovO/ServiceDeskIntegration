@@ -15,10 +15,12 @@ import {errorLoggingInterceptor} from './interceptors/error-logging.interceptor'
 import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
 import {providePrimeNG} from 'primeng/config';
 import {TelegramPreset} from './app-layout/mypreset';
+import {MessageService} from 'primeng/api';
 
 
 export const appConfig: ApplicationConfig = {
   providers: [
+    MessageService,
     provideAnimationsAsync(),
     providePrimeNG({
       theme: {

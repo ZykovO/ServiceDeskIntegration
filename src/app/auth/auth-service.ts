@@ -7,7 +7,6 @@ import { Router } from '@angular/router';
 import { TelegramService } from '../services/telegram';
 
 import { environment } from '../../environments/environment';
-import {NotificationService} from '../services/notification/notification.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +15,6 @@ export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
   private telegramService = inject(TelegramService);
-  private notificationService = inject(NotificationService);
 
   token: string | null = null;
   refresh: string | null = null;
@@ -43,10 +41,6 @@ export class AuthService {
     console.log('Auth data saved to sessionStorage');
 
     // Показываем уведомление об успешной авторизации
-    this.notificationService.showSuccess(
-      `Добро пожаловать, ${this.user.first_name || this.user.username}!`,
-      'Авторизация успешна'
-    );
   }
 
   isAuth(): boolean {
@@ -75,10 +69,6 @@ export class AuthService {
           console.log('Auth restored from sessionStorage');
         } catch (error) {
           console.error('Error parsing sessionStorage auth data:', error);
-          this.notificationService.showError(
-            'Ошибка восстановления сессии',
-            'Ошибка авторизации'
-          );
           sessionStorage.removeItem('telegram_auth');
         }
       }
@@ -102,10 +92,6 @@ export class AuthService {
 
       if (!initData || !initDataUnsafe?.user) {
         console.error('Cannot authenticate: missing Telegram data');
-        this.notificationService.showError(
-          'Приложение должно быть открыто из Telegram',
-          'Ошибка авторизации'
-        );
         return of(false);
       }
 
@@ -147,10 +133,6 @@ export class AuthService {
           sessionStorage.setItem('telegram_auth', JSON.stringify(authParams));
 
           // Показываем успешное уведомление
-          this.notificationService.showSuccess(
-            `Добро пожаловать, ${response.user.first_name || response.user.username}!`,
-            'Авторизация успешна'
-          );
         }),
         map(() => true),
         catchError(error => {
@@ -176,16 +158,11 @@ export class AuthService {
             errorMessage = error.error.message;
           }
 
-          this.notificationService.showError(errorMessage, errorTitle, 7000);
           return of(false);
         })
       );
     } catch (error) {
       console.error('Unexpected error during Telegram authentication:', error);
-      this.notificationService.showError(
-        'Произошла неожиданная ошибка при авторизации',
-        'Ошибка авторизации'
-      );
       return of(false);
     }
   }
@@ -201,20 +178,12 @@ export class AuthService {
     this.baseApiUrl = null;
     sessionStorage.removeItem('telegram_auth');
 
-    this.notificationService.showInfo(
-      `До свидания, ${userName}!`,
-      'Выход выполнен'
-    );
 
     this.router.navigate(['/login']);
   }
 
   refreshToken() {
     if (!this.refresh) {
-      this.notificationService.showError(
-        'Токен обновления недоступен. Необходимо войти заново.',
-        'Ошибка обновления токена'
-      );
       return throwError(() => new Error('No refresh token available'));
     }
 
@@ -246,8 +215,6 @@ export class AuthService {
         } else if (err.status === 0) {
           errorMessage = 'Нет соединения с сервером';
         }
-
-        this.notificationService.showError(errorMessage, 'Ошибка обновления сессии');
         this.logout();
         return throwError(() => err);
       })

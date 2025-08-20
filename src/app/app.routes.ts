@@ -1,22 +1,20 @@
 import {Routes} from '@angular/router';
-import {HomePage} from './home-page/home-page';
 import {AppLogin} from './pages/app-login/app-login';
 import {canActivateAuth} from './auth/access.guard';
-import {CloseTicketPage} from './pages/close-ticket-page/close-ticket-page';
 import {AppLayout} from './app-layout/app-layout';
 import {CloseTicketFormPage} from './pages/close-ticket-form-page/close-ticket-form-page';
+import {TicketViewPage} from './pages/ticket/ticket-view-page/ticket-view-page';
 
 
 export const routes: Routes = [
   {
-    path: '', component: AppLayout, canActivate: [canActivateAuth], children: [
+    path: '', component: AppLayout, children: [ // , canActivate: [canActivateAuth]
 
-
+      {path: 'ticket/:id', component: TicketViewPage},
+      {path: 'ticket/:id/close', component: CloseTicketFormPage},
     ]
   },
 
-  {path: 'ticket/:id', component: CloseTicketPage},
-  {path: 'ticket/:id/close', component: CloseTicketFormPage},
 
 
 

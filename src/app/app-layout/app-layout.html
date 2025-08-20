@@ -1,8 +1,9 @@
-<app-layout-header (toggleSidebarEvent)="toggleSidebar()"></app-layout-header>
-<div class="layout-wrapper">
-  <app-layout-sidebar [class.sidebar-open]="isSidebarOpen"></app-layout-sidebar>
-  <div class="content">
+<div class="p-2 h-screen">
+  <ng-container *ngIf="!(isLoading); else loadingTpl">
     <router-outlet></router-outlet>
-  </div>
+  </ng-container>
+
+  <ng-template #loadingTpl>
+    <p-skeleton class="w-full h-full"></p-skeleton>
+  </ng-template>
 </div>
-<app-layout-footer></app-layout-footer>

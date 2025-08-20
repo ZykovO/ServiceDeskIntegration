@@ -10,10 +10,8 @@ import {
 import { Observable, throwError } from 'rxjs';
 import { tap, catchError } from 'rxjs/operators';
 import { inject } from '@angular/core';
-import { NotificationService } from '../services/notification/notification.service';
 
 export const errorLoggingInterceptor: HttpInterceptorFn = (req, next) => {
-  const notificationService = inject(NotificationService);
 
   return next(req).pipe(
     catchError((err: HttpErrorResponse) => {
@@ -43,8 +41,6 @@ Error Response: ${errorResponse}
       `;
 
       console.error(message);
-
-      notificationService.showError(message, 'Ошибка HTTP', 10000);
 
       return throwError(() => err);
     })

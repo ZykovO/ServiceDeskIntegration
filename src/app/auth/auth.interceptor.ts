@@ -4,13 +4,11 @@ import { inject } from '@angular/core';
 import { AuthService } from './auth-service';
 
 import { BehaviorSubject, catchError, filter, switchMap, tap, throwError } from 'rxjs';
-import {NotificationService} from '../services/notification/notification.service';
 
 let isRefreshing$ = new BehaviorSubject<boolean>(false);
 
 export const authTokenInterceptor: HttpInterceptorFn = (req, next) => {
   const authService = inject(AuthService);
-  const notificationService = inject(NotificationService);
 
   if (!authService.isAuth()) {
     return next(req);
@@ -20,17 +18,17 @@ export const authTokenInterceptor: HttpInterceptorFn = (req, next) => {
   if (!token) return next(req);
 
   if (isRefreshing$.value) {
-    return refreshAndProceed(authService, req, next, notificationService);
+    return refreshAndProceed(authService, req, next);
   }
 
   return next(addToken(req, token)).pipe(
     catchError(err => {
       if (err.status === 401) {
-        return refreshAndProceed(authService, req, next, notificationService);
+        return refreshAndProceed(authService, req, next);
       }
 
       // Обрабатываем другие HTTP ошибки
-      handleHttpError(err, notificationService);
+      handleHttpError(err);
       return throwError(() => err);
     })
   );
@@ -40,7 +38,6 @@ const refreshAndProceed = (
   authService: AuthService,
   req: HttpRequest<any>,
   next: HttpHandlerFn,
-  notificationService: NotificationService
 ) => {
   if (!isRefreshing$.value) {
     isRefreshing$.next(true);
@@ -78,7 +75,7 @@ const addToken = (req: HttpRequest<any>, token: string) => {
   });
 };
 
-const handleHttpError = (error: any, notificationService: NotificationService) => {
+const handleHttpError = (error: any) => {
   // Игнорируем ошибки авторизации (они обрабатываются отдельно)
   if (error.status === 401) {
     return;
@@ -128,6 +125,6 @@ const handleHttpError = (error: any, notificationService: NotificationService) =
 
   // Показываем уведомление только для серьезных ошибок
   if (error.status !== 422) { // Не показываем для ошибок валидации
-    notificationService.showError(errorMessage, errorTitle, 5000);
+
   }
 };
