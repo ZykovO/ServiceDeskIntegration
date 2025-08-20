@@ -3,7 +3,7 @@ import {Ticket} from '../../../interfaces/ticket.interface';
 import {StorageService} from '../../../services/local-storage-service';
 import {TicketService} from '../../../services/ticket-service';
 import {ActivatedRoute} from '@angular/router';
-import {JsonPipe} from '@angular/common';
+import {JsonPipe, NgClass} from '@angular/common';
 import {PrepareNewRequest} from '../../../interfaces/prepare-new-request';
 import {
   FormField,
@@ -18,6 +18,11 @@ import {InputText} from 'primeng/inputtext';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {Select} from 'primeng/select';
 import {Textarea} from 'primeng/textarea';
+import {Card} from 'primeng/card';
+import {Fluid} from 'primeng/fluid';
+import {DatePicker} from 'primeng/datepicker';
+import {MultiSelect} from 'primeng/multiselect';
+import {PrimeTemplate} from 'primeng/api';
 
 @Component({
   selector: 'app-ticket-close-page',
@@ -30,7 +35,13 @@ import {Textarea} from 'primeng/textarea';
     ReactiveFormsModule,
     Select,
     Textarea,
-    FormsModule
+    FormsModule,
+    NgClass,
+    Card,
+    Fluid,
+    DatePicker,
+    MultiSelect,
+    PrimeTemplate
   ],
   templateUrl: './ticket-close-page.html',
   styleUrl: './ticket-close-page.css'

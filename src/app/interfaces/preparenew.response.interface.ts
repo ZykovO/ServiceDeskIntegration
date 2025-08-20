@@ -46,8 +46,19 @@ export interface FormFile extends BaseFormField {
 // Union type for all form fields
 export type FormField = FormInput | FormTextarea | FormSelect | FormFile;
 
+export interface HeadActBlock {
+  dpl: FormInput
+  tc: FormInput
+  problemsubcategory_id: FormSelect
+  performer_name: FormInput
+  performer_ids: FormSelect
+  respondent_name: FormInput
+  reason: FormTextarea
+  worked: FormTextarea
+}
+
 // Main response interface
 export interface PrepareNewFormResponse {
-  header: FormField[];
+  header: HeadActBlock;
   footer: FormField[];
 }

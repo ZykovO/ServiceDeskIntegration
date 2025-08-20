@@ -1,56 +1,127 @@
 @if (!this.isLoading && formFields) {
-  @for (formField of formFields.header; track formField.id) {
-    @switch (formField.field_type) {
+  <p-card class="mb-3 shadow-2">
+    <ng-template pTemplate="header">
+      <div class="flex align-items-center gap-2 p-2 bg-black-alpha-40 text-white border-round-top">
+        <i class="pi pi-lock text-primary text-sm"></i>
+        <span class="text-lg font-bold">Закрытие заявки</span>
+      </div>
+    </ng-template>
 
-      @case ('input') {
-        <input [id]="formField.id"
-               pInputText
-               [type]="formField.type"
-               [readonly]="formField.readonly"
-               [(ngModel)]="formField.value"
-               styleClass="telegram-input w-full" />
-      }
+    @if (formFields.header.dpl && formFields.header.tc && formFields.header.problemsubcategory_id && formFields.header.performer_name && formFields.header.performer_ids && formFields.header.respondent_name) {
+      <div class="grid gap-2 p-2">
 
-      @case ('textarea') {
-        <textarea [id]="formField.id"
-                  pInputTextarea
-                  [readonly]="formField.readonly"
-                  [(ngModel)]="formField.value"
-                  [autoResize]="true"
-                  rows="3"
-                  styleClass="telegram-textarea w-full">
-                  </textarea>
-      }
+        <!-- Первый ряд: Дата и время в одной строке -->
+        <div class="col-12">
+          <div class="flex gap-2">
+            <div class="flex-1">
+              <label class="text-xs text-300 font-semibold block mb-1">{{ formFields.header.dpl.placeholder }}</label>
+              <p-date-picker
+                [id]="formFields.header.dpl.id"
+                dateFormat="dd.mm.yy"
+                styleClass="w-full"
+                [style]="{'width': '100%', 'font-size': '0.875rem'}">
+              </p-date-picker>
+            </div>
+            <div class="flex-1">
+              <label class="text-xs text-300 font-semibold block mb-1">{{ formFields.header.tc.placeholder }}</label>
+              <p-date-picker
+                [id]="formFields.header.tc.id"
+                [timeOnly]="true"
+                styleClass="w-full"
+                [style]="{'width': '100%', 'font-size': '0.875rem'}">
+              </p-date-picker>
+            </div>
+          </div>
+        </div>
 
-      @case ('select') {
-        <!-- [multiple]="formField.multiple" -->
-        <p-select [inputId]="formField.id"
-                  [options]="getSelectOptions(formField)"
-                  optionLabel="text"
-                  optionValue="value"
+        <!-- Второй ряд: Подкатегория (полная ширина) -->
+        <div class="col-12">
+          <label class="text-xs text-300 font-semibold block mb-1">{{ formFields.header.problemsubcategory_id.placeholder }}</label>
+          <p-select
+            [options]="formFields.header.problemsubcategory_id.options"
+            optionLabel="text"
+            optionValue="value"
+            class="w-full"
+            [style]="{'font-size': '0.875rem'}">
+          </p-select>
+        </div>
 
-                  [disabled]="formField.disabled"
-                  [required]="formField.required"
-                  placeholder="Оберіть опцію"
-                  styleClass="telegram-select w-full">
-        </p-select>
-      }
+        <!-- Третий ряд: Исполнители -->
+        <div class="col-12">
+          <div class="flex gap-2">
+            <div class="flex-1">
+              <label class="text-xs text-300 font-semibold block mb-1">{{ formFields.header.performer_name.placeholder }}</label>
+              <input pInputText
+                     [type]="formFields.header.performer_name.type"
+                     [readonly]="formFields.header.performer_name.readonly"
+                     [value]="formFields.header.performer_name.value"
+                     class="w-full text-sm"
+                     style="width: 100%"/>
+            </div>
+            <div class="flex-1">
+              <label class="text-xs text-300 font-semibold block mb-1">{{ formFields.header.performer_ids.placeholder }}</label>
+              <p-multi-select
+                [options]="formFields.header.performer_ids.options"
+                optionLabel="text"
+                optionValue="value"
+                styleClass="w-full"
+                [style]="{'width': '100%', 'font-size': '0.875rem'}">
+              </p-multi-select>
+            </div>
+          </div>
+        </div>
 
-      @case ('file') {
-        <!-- [accept]="formField.accept" -->
-        <p-fileUpload [id]="formField.id"
-                      mode="basic"
+        <!-- Четвертый ряд: Данные клиента -->
+        <div class="col-12">
+          <div class="flex gap-2">
+            <div class="flex-auto" style="flex: 0 0 60%">
+              <label class="text-xs text-300 font-semibold block mb-1">{{ formFields.header.respondent_name.placeholder }}</label>
+              <span class="text-100 text-xs opacity-70 block mb-1">* ФИО клиента</span>
+              <input pInputText
+                     [type]="formFields.header.respondent_name.type"
+                     [readonly]="formFields.header.respondent_name.readonly"
+                     [defaultValue]="'---'"
+                     class="w-full text-sm"
+                     style="width: 100%"/>
+            </div>
+            <div class="flex-auto" style="flex: 0 0 40%">
+              <label class="text-xs text-300 font-semibold block mb-1">Должность</label>
+              <input pInputText
+                     id="respondent_post"
+                     type="text"
+                     [readonly]="false"
+                     [defaultValue]="'управ.'"
+                     class="w-full text-sm"
+                     style="width: 100%"/>
+            </div>
+          </div>
+        </div>
 
-                      [multiple]="formField.multiple"
-                      [disabled]="formField.disabled"
-                      [auto]="false"
-                      chooseLabel="Обрати файл"
-                      styleClass="telegram-file-upload w-full">
-        </p-fileUpload>
-      }
+        <!-- Пятый ряд: Текстовые области (стекируются вертикально на мобильных) -->
+        <div class="col-12">
+          <label class="text-xs text-300 font-semibold block mb-1">{{ formFields.header.reason.placeholder }}</label>
+          <textarea pTextarea
+                    rows="3"
+                    [id]="formFields.header.reason.id"
+                    [readonly]="formFields.header.reason.readonly"
+                    [value]="formFields.header.reason.value"
+                    class="w-full text-sm">
+          </textarea>
+        </div>
+
+        <div class="col-12">
+          <label class="text-xs text-300 font-semibold block mb-1">{{ formFields.header.worked.placeholder }}</label>
+          <textarea pTextarea
+                    rows="3"
+                    [id]="formFields.header.worked.id"
+                    [readonly]="formFields.header.worked.readonly"
+                    [value]="formFields.header.worked.value"
+                    class="w-full text-sm">
+          </textarea>
+        </div>
+      </div>
     }
-  }
-
+  </p-card>
 } @else {
   <p-skeleton class="w-full h-full"/>
 }
