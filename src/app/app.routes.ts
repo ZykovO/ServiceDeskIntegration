@@ -12,7 +12,7 @@ export const routes: Routes = [
     path: '', component: AppLayout, children: [ // , canActivate: [canActivateAuth]
 
       {path: 'ticket/:id', component: TicketViewPage},
-      {path: 'ticket/:id/close', component: TicketClosePage},
+      {path: 'ticket/:id/close/:actType', component: TicketClosePage},
     ]
   },
 

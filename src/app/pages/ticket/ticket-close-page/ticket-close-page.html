@@ -1,1 +1,10 @@
-<p>ticket-close-page works!</p>
+@if (!this.isLoading && formFields) {
+  @for (field of formFields.header; track field.id) {
+    <p-message>
+      {{field.placeholder}}
+    </p-message>
+  }
+
+} @else {
+  <p-skeleton class="w-full h-full"/>
+}

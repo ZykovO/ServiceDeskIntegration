@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { TicketService } from '../../../services/ticket-service';
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import { Ticket } from '../../../interfaces/ticket.interface';
 import { finalize } from 'rxjs/operators';
 import {DatePipe, JsonPipe, NgForOf, NgIf} from '@angular/common';
@@ -14,6 +14,7 @@ import {Skeleton} from 'primeng/skeleton';
 import {Message} from 'primeng/message';
 import {Fieldset} from 'primeng/fieldset';
 import {StorageService} from '../../../services/local-storage-service';
+import {routes} from '../../../app.routes';
 
 
 @Component({
@@ -37,11 +38,11 @@ export class TicketViewPage implements OnInit {
   error?: string;
   isLoading = true; // Добавляем локальное состояние загрузки
   private readonly TICKET_KEY = 'currentTicket';
-  private readonly FORM_KEY = 'currentTicketForm';
 
   constructor(
     private ticketService: TicketService,
     private route: ActivatedRoute,
+    private routers: Router,
     private storage: StorageService
   ) {}
 
@@ -100,6 +101,7 @@ export class TicketViewPage implements OnInit {
 
   executeAction(action: number): void {
     console.log('Выполняется действие:', action);
+    this.routers.navigate(['ticket', this.ticket?.InternalId,'close',action]);
   }
 
 
@@ -109,12 +111,5 @@ export class TicketViewPage implements OnInit {
 
   getCurrentTicket(): Ticket | null {
     return this.storage.get<Ticket>(this.TICKET_KEY);
-  }
-  saveTicketForm(formData: FormData): void {
-    this.storage.set(this.FORM_KEY, formData);
-  }
-
-  getCurrentTicketForm(): Ticket | null {
-    return this.storage.get<Ticket>(this.FORM_KEY);
   }
 }
