@@ -62,9 +62,11 @@ export class TicketViewPage implements OnInit {
     }
     if (this.getCurrentTicket()) {
       this.ticket = this.getCurrentTicket();
-      console.log(this.ticket);
-      this.isLoading = false;
-      return;
+      if (this.ticket?.InternalId === ticketId) {
+        this.isLoading = false;
+        return;
+      }
+
     }
 
     this.ticketService.get_ticket(ticketId)
