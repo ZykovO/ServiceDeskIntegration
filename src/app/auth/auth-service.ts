@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, tap, throwError, Observable, of, map } from 'rxjs';
 import { RefreshTokenResponse, TokenResponse, UserResponse } from './auth-interface';
-import { Router } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import { TelegramService } from '../services/telegram';
 
 import { environment } from '../../environments/environment';
@@ -15,6 +15,7 @@ export class AuthService {
   private http = inject(HttpClient);
   private router = inject(Router);
   private telegramService = inject(TelegramService);
+  private route = inject(ActivatedRoute);
 
   token: string | null = null;
   refresh: string | null = null;

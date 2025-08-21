@@ -1,0 +1,118 @@
+<!-- upload-file-component.html -->
+<p-card class="mobile-file-card">
+  <!-- Компактный заголовок с счетчиком -->
+  <ng-template pTemplate="header">
+    <div class="mobile-header">
+      <div class="header-content">
+        <i class="pi pi-paperclip"></i>
+        <span>Файлы</span>
+        <p-badge
+          *ngIf="totalFilesCount > 0"
+          [value]="totalFilesCount.toString()"
+          severity="info"
+          class="file-counter">
+        </p-badge>
+      </div>
+    </div>
+  </ng-template>
+
+  <!-- Компактная область загрузки -->
+  <div class="upload-section">
+    <p-fileupload
+      name="files"
+      mode="basic"
+      (onSelect)="onFileSelect($event)"
+      [auto]="false"
+      chooseLabel="+"
+      [multiple]="true"
+      [showUploadButton]="false"
+      [showCancelButton]="false"
+      class="compact-upload">
+    </p-fileupload>
+
+    <!-- Кнопка загрузки всех (только если есть новые файлы) -->
+    <button
+      *ngIf="uploadedFiles.length > 0"
+      pButton
+      type="button"
+      icon="pi pi-upload"
+      class="upload-all-btn"
+      (click)="uploadAll()"
+      pTooltip="Загрузить все"
+      tooltipPosition="top">
+    </button>
+  </div>
+
+  <!-- Карусель файлов -->
+  <div *ngIf="allFiles.length > 0; else emptyState" class="files-carousel">
+    <p-carousel
+      [value]="allFiles"
+      [numVisible]="2"
+      [numScroll]="1"
+      [circular]="false"
+      [showIndicators]="allFiles.length > 2"
+      [showNavigators]="allFiles.length > 2"
+      [responsiveOptions]="carouselResponsiveOptions"
+      class="mobile-carousel">
+
+      <ng-template pTemplate="item" let-file>
+        <div class="file-slide">
+          <div class="file-preview">
+            <!-- Изображения -->
+            <ng-container *ngIf="isImage(file.name); else fileIcon">
+            <div class="image-container">
+                <img
+                  [src]="file | filePreview"
+                  [alt]="file.name"
+                  class="preview-image"
+                  (click)="previewImage(file)">
+                <div class="image-overlay">
+                  <i class="pi pi-eye"></i>
+                </div>
+              </div>
+            </ng-container>
+
+            <!-- Иконки файлов -->
+            <ng-template #fileIcon>
+              <div class="file-icon-container">
+                <i [class]="'pi ' + getFileIcon(file.name)" class="file-icon"></i>
+              </div>
+            </ng-template>
+
+            <!-- Кнопка удаления -->
+            <button
+              pButton
+              type="button"
+              icon="pi pi-times"
+              class="delete-btn"
+              (click)="removeFile(file)"
+              pTooltip="Удалить"
+              tooltipPosition="top">
+            </button>
+
+            <!-- Индикатор нового файла -->
+            <div *ngIf="file instanceof File" class="new-file-indicator">
+              <i class="pi pi-clock"></i>
+            </div>
+          </div>
+
+          <!-- Название файла -->
+          <div class="file-info">
+            <span class="file-name" [title]="file.name">
+              {{ truncateFileName(file.name) }}
+            </span>
+          </div>
+        </div>
+      </ng-template>
+    </p-carousel>
+  </div>
+
+  <!-- Пустое состояние -->
+  <ng-template #emptyState>
+    <div class="empty-state">
+      <i class="pi pi-inbox empty-icon"></i>
+      <p class="empty-text">Нет файлов</p>
+      <p class="empty-subtext">Нажмите + для добавления</p>
+    </div>
+  </ng-template>
+</p-card>

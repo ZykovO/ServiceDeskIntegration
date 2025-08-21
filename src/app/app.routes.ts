@@ -11,8 +11,8 @@ export const routes: Routes = [
   {
     path: '', component: AppLayout, children: [ // , canActivate: [canActivateAuth]
 
-      {path: 'ticket/:id', component: TicketViewPage},
-      {path: 'ticket/:id/close/:actType', component: TicketClosePage},
+      {path: 'ticket/:user_id/:id', component: TicketViewPage},
+      {path: 'ticket/:user_id/:id/close/:actType', component: TicketClosePage},
     ]
   },
 

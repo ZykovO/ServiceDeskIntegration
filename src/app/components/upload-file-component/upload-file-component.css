@@ -1,0 +1,420 @@
+/* upload-file-component.css */
+/* Основная карточка */
+.mobile-file-card {
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e1e3e6;
+  margin: 0;
+  overflow: hidden;
+  background: #ffffff;
+}
+
+/* Компактный заголовок */
+.mobile-header {
+  background: #2ea6ff;
+  padding: 12px 16px;
+  color: white;
+  position: relative;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+}
+
+.file-counter {
+  margin-left: auto;
+  background: rgba(255, 255, 255, 0.2);
+  color: white;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 10px;
+}
+
+/* Секция загрузки */
+.upload-section {
+  display: flex;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #f8f9fa;
+  align-items: center;
+  border-bottom: 1px solid #e1e3e6;
+}
+
+.compact-upload {
+  flex: 1;
+}
+
+.compact-upload .p-fileupload-choose {
+  background: #2ea6ff;
+  border: none;
+  border-radius: 10px;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.2rem;
+  font-weight: bold;
+  transition: all 0.2s ease;
+  min-width: 40px;
+}
+
+.compact-upload .p-fileupload-choose:hover {
+  background: #1a8eeb;
+  transform: scale(1.05);
+}
+
+.upload-all-btn {
+  background: #32d74b;
+  border: none;
+  border-radius: 10px;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  min-width: 40px;
+  color: white;
+}
+
+.upload-all-btn:hover {
+  background: #30db5b;
+  transform: scale(1.05);
+}
+
+/* Карусель файлов */
+.files-carousel {
+  padding: 16px;
+  background: #ffffff;
+}
+
+.mobile-carousel .p-carousel-content {
+  position: relative;
+}
+
+.mobile-carousel .p-carousel-container {
+  margin: 0 20px;
+}
+
+.mobile-carousel .p-carousel-prev,
+.mobile-carousel .p-carousel-next {
+  background: rgba(46, 166, 255, 0.1);
+  border: 1px solid rgba(46, 166, 255, 0.2);
+  color: #2ea6ff;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  transition: all 0.2s ease;
+}
+
+.mobile-carousel .p-carousel-prev {
+  left: -4px;
+}
+
+.mobile-carousel .p-carousel-next {
+  right: -4px;
+}
+
+.mobile-carousel .p-carousel-prev:hover,
+.mobile-carousel .p-carousel-next:hover {
+  background: rgba(46, 166, 255, 0.2);
+  color: #1a8eeb;
+}
+
+.mobile-carousel .p-carousel-indicators {
+  padding: 8px 0 0;
+}
+
+.mobile-carousel .p-carousel-indicator button {
+  background: #cbd5e1;
+  border: none;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  margin: 0 2px;
+}
+
+.mobile-carousel .p-carousel-indicator.p-highlight button {
+  background: #2ea6ff;
+}
+
+/* Слайд файла */
+.file-slide {
+  padding: 8px;
+  margin: 0 4px;
+}
+
+.file-preview {
+  position: relative;
+  background: white;
+  border-radius: 8px;
+  border: 1px solid #e1e3e6;
+  overflow: hidden;
+  aspect-ratio: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.file-preview:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border-color: #2ea6ff;
+}
+
+/* Изображения */
+.image-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.preview-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.image-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  color: white;
+  font-size: 1.2rem;
+}
+
+.image-container:hover .preview-image {
+  transform: scale(1.05);
+}
+
+.image-container:hover .image-overlay {
+  opacity: 1;
+}
+
+/* Иконки файлов */
+.file-icon-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  background: #f1f5f9;
+}
+
+.file-icon {
+  font-size: 2rem;
+  color: #64748b;
+}
+
+/* Кнопка удаления */
+.delete-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  background: rgba(255, 69, 58, 0.9);
+  border: none;
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  padding: 0;
+  font-size: 0.7rem;
+  opacity: 0;
+  transition: all 0.2s ease;
+  z-index: 3;
+}
+
+.file-preview:hover .delete-btn {
+  opacity: 1;
+}
+
+.delete-btn:hover {
+  background: #ff453a;
+  transform: scale(1.1);
+}
+
+/* Индикатор нового файла */
+.new-file-indicator {
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  background: #ff9f0a;
+  color: white;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  z-index: 2;
+}
+
+/* Информация о файле */
+.file-info {
+  padding: 8px 4px;
+  text-align: center;
+}
+
+.file-name {
+  font-size: 0.75rem;
+  color: #000000;
+  font-weight: 500;
+  line-height: 1.2;
+  display: block;
+  word-break: break-word;
+}
+
+/* Пустое состояние */
+.empty-state {
+  padding: 24px;
+  text-align: center;
+  background: #ffffff;
+}
+
+.empty-icon {
+  font-size: 3rem;
+  color: #8e8e93;
+  margin-bottom: 12px;
+}
+
+.empty-text {
+  font-size: 0.9rem;
+  color: #000000;
+  font-weight: 500;
+  margin: 0 0 4px;
+}
+
+.empty-subtext {
+  font-size: 0.8rem;
+  color: #8e8e93;
+  margin: 0;
+}
+
+/* Адаптивность для очень маленьких экранов */
+@media (max-width: 360px) {
+  .mobile-carousel .p-carousel-container {
+    margin: 0 16px;
+  }
+
+  .file-slide {
+    padding: 4px;
+    margin: 0 2px;
+  }
+
+  .file-name {
+    font-size: 0.7rem;
+  }
+
+  .header-content {
+    font-size: 0.85rem;
+  }
+}
+
+/* Анимации */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.file-slide {
+  animation: slideIn 0.3s ease;
+}
+
+/* Состояние загрузки */
+.uploading .file-preview {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+.uploading .file-preview::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Тултипы */
+.p-tooltip .p-tooltip-text {
+  font-size: 0.75rem;
+  padding: 4px 8px;
+  background: #424242;
+  color: #ffffff;
+  border-radius: 6px;
+}
+
+/* Темная тема */
+@media (prefers-color-scheme: dark) {
+  .mobile-file-card {
+    background: #212121;
+    border-color: #3a3a3c;
+  }
+
+  .upload-section {
+    background: #2c2c2e;
+    border-color: #3a3a3c;
+  }
+
+  .files-carousel {
+    background: #212121;
+  }
+
+  .file-preview {
+    background: #2c2c2e;
+    border-color: #3a3a3c;
+  }
+
+  .file-icon-container {
+    background: #3a3a3c;
+  }
+
+  .file-icon {
+    color: #8e8e93;
+  }
+
+  .file-name {
+    color: #ffffff;
+  }
+
+  .empty-state {
+    background: #212121;
+  }
+
+  .empty-text {
+    color: #ffffff;
+  }
+}

@@ -35,6 +35,7 @@ import {routes} from '../../../app.routes';
 })
 export class TicketViewPage implements OnInit {
   ticket?: Ticket | null;
+  userId!: number;
   error?: string;
   isLoading = true; // Добавляем локальное состояние загрузки
   private readonly TICKET_KEY = 'currentTicket';
@@ -54,7 +55,8 @@ export class TicketViewPage implements OnInit {
     this.isLoading = true;
 
     const ticketId = Number(this.route.snapshot.paramMap.get('id'));
-
+    const userId = Number(this.route.snapshot.paramMap.get('user_id'));
+    this.userId=userId
     if (isNaN(ticketId)) {
       this.error = 'Неверный ID заявки';
       this.isLoading = false;
@@ -103,7 +105,7 @@ export class TicketViewPage implements OnInit {
 
   executeAction(action: number): void {
     console.log('Выполняется действие:', action);
-    this.routers.navigate(['ticket', this.ticket?.InternalId,'close',action]);
+    this.routers.navigate(['ticket',this.userId ,this.ticket?.InternalId,'close',action]);
   }
 
 

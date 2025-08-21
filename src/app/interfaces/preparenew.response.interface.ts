@@ -62,3 +62,8 @@ export interface PrepareNewFormResponse {
   header: HeadActBlock;
   footer: FormField[];
 }
+
+export interface TicketAttachments {
+  session:string
+  files:string[]
+}

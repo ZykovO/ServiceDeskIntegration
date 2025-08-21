@@ -7,7 +7,7 @@
       </div>
     </ng-template>
 
-    @if (formFields.header.dpl && formFields.header.tc && formFields.header.problemsubcategory_id && formFields.header.performer_name && formFields.header.performer_ids && formFields.header.respondent_name) {
+    @if (formFields.header && formFields.header.dpl && formFields.header.tc && formFields.header.problemsubcategory_id && formFields.header.performer_name && formFields.header.performer_ids && formFields.header.respondent_name) {
       <div class="grid gap-2 p-2">
 
         <!-- Первый ряд: Дата и время в одной строке -->
@@ -15,28 +15,29 @@
           <div class="flex gap-2">
             <div class="flex-1">
               <label class="text-xs text-300 font-semibold block mb-1">{{ formFields.header.dpl.placeholder }}</label>
-              <p-date-picker
+              <p-datePicker
                 [id]="formFields.header.dpl.id"
                 dateFormat="dd.mm.yy"
                 styleClass="w-full"
                 [style]="{'width': '100%', 'font-size': '0.875rem'}">
-              </p-date-picker>
+              </p-datePicker>
             </div>
             <div class="flex-1">
               <label class="text-xs text-300 font-semibold block mb-1">{{ formFields.header.tc.placeholder }}</label>
-              <p-date-picker
+              <p-datePicker
                 [id]="formFields.header.tc.id"
                 [timeOnly]="true"
                 styleClass="w-full"
                 [style]="{'width': '100%', 'font-size': '0.875rem'}">
-              </p-date-picker>
+              </p-datePicker>
             </div>
           </div>
         </div>
 
         <!-- Второй ряд: Подкатегория (полная ширина) -->
         <div class="col-12">
-          <label class="text-xs text-300 font-semibold block mb-1">{{ formFields.header.problemsubcategory_id.placeholder }}</label>
+          <label
+            class="text-xs text-300 font-semibold block mb-1">{{ formFields.header.problemsubcategory_id.placeholder }}</label>
           <p-select
             [options]="formFields.header.problemsubcategory_id.options"
             optionLabel="text"
@@ -51,23 +52,25 @@
         <div class="col-12">
           <div class="flex gap-2">
             <div class="flex-1">
-              <label class="text-xs text-300 font-semibold block mb-1">{{ formFields.header.performer_name.placeholder }}</label>
+              <label
+                class="text-xs text-300 font-semibold block mb-1">{{ formFields.header.performer_name.placeholder }}</label>
               <input pInputText
-                     [type]="formFields.header.performer_name.type"
+                     [type]="formFields.header.performer_name.type || 'text'"
                      [readonly]="formFields.header.performer_name.readonly"
                      [value]="formFields.header.performer_name.value"
                      class="w-full text-sm"
                      style="width: 100%"/>
             </div>
             <div class="flex-1">
-              <label class="text-xs text-300 font-semibold block mb-1">{{ formFields.header.performer_ids.placeholder }}</label>
+              <label
+                class="text-xs text-300 font-semibold block mb-1">{{ formFields.header.performer_ids.placeholder }}</label>
               <div class="relative">
-                <p-multi-select
+                <p-multiSelect
                   [options]="formFields.header.performer_ids.options"
                   optionLabel="text"
                   optionValue="value"
                   styleClass="w-full">
-                </p-multi-select>
+                </p-multiSelect>
               </div>
             </div>
           </div>
@@ -77,10 +80,11 @@
         <div class="col-12">
           <div class="flex gap-2">
             <div class="flex-auto" style="flex: 0 0 60%">
-              <label class="text-xs text-300 font-semibold block mb-1">{{ formFields.header.respondent_name.placeholder }}</label>
+              <label
+                class="text-xs text-300 font-semibold block mb-1">{{ formFields.header.respondent_name.placeholder }}</label>
               <span class="text-100 text-xs opacity-70 block mb-1">* ФИО клиента</span>
               <input pInputText
-                     [type]="formFields.header.respondent_name.type"
+                     [type]="formFields.header.respondent_name.type || 'text'"
                      [readonly]="formFields.header.respondent_name.readonly"
                      [defaultValue]="'---'"
                      class="w-full text-sm"
@@ -101,28 +105,34 @@
 
         <!-- Пятый ряд: Текстовые области (стекируются вертикально на мобильных) -->
         <div class="col-12">
-          <label class="text-xs text-300 font-semibold block mb-1">{{ formFields.header.reason.placeholder }}</label>
+          <label class="text-xs text-300 font-semibold block mb-1">{{ formFields.header.reason?.placeholder }}</label>
           <textarea pTextarea
                     rows="3"
-                    [id]="formFields.header.reason.id"
-                    [readonly]="formFields.header.reason.readonly"
-                    [value]="formFields.header.reason.value"
+                    [id]="formFields.header.reason?.id"
+                    [readonly]="formFields.header.reason?.readonly"
+                    [value]="formFields.header.reason?.value"
                     class="w-full text-sm">
           </textarea>
         </div>
 
         <div class="col-12">
-          <label class="text-xs text-300 font-semibold block mb-1">{{ formFields.header.worked.placeholder }}</label>
+          <label class="text-xs text-300 font-semibold block mb-1">{{ formFields.header.worked?.placeholder }}</label>
           <textarea pTextarea
                     rows="3"
-                    [id]="formFields.header.worked.id"
-                    [readonly]="formFields.header.worked.readonly"
-                    [value]="formFields.header.worked.value"
+                    [id]="formFields.header.worked?.id"
+                    [readonly]="formFields.header.worked?.readonly"
+                    [value]="formFields.header.worked?.value"
                     class="w-full text-sm">
           </textarea>
         </div>
       </div>
     }
+
+    <!-- Компонент загрузки файлов -->
+    <app-upload-file-component [ticketId]="ticket!.InternalId">
+
+    </app-upload-file-component>
+
   </p-card>
 } @else {
   <p-skeleton class="w-full h-full"/>

@@ -17,13 +17,9 @@ import {
 import {FormsModule} from '@angular/forms';
 import {ProgressSpinner} from 'primeng/progressspinner';
 import {Card} from 'primeng/card';
-import {PrimeTemplate} from 'primeng/api';
+import {MessageService, PrimeTemplate} from 'primeng/api';
 import {Message} from 'primeng/message';
 import {Button} from 'primeng/button';
-import {InputText} from 'primeng/inputtext';
-import {Textarea} from 'primeng/textarea';
-import {Select} from 'primeng/select';
-import {FileUpload} from 'primeng/fileupload';
 import {Accordion} from 'primeng/accordion';
 import {Divider} from 'primeng/divider';
 import { AccordionModule } from 'primeng/accordion';
@@ -35,16 +31,11 @@ import { AccordionModule } from 'primeng/accordion';
     JsonPipe,
     FormsModule,
     AccordionModule,
-    NgClass,
     ProgressSpinner,
     Card,
     PrimeTemplate,
     Message,
     Button,
-    InputText,
-    Textarea,
-    Select,
-    FileUpload,
     Accordion,
     Divider
   ],
@@ -65,6 +56,7 @@ export class CloseTicketFormPage implements OnInit, OnDestroy {
     private ticketService: TicketService,
     private ticketFormService: TicketFormService,
     private telegramService: TelegramService,
+    private messageService: MessageService
   ) {}
 
   ngOnInit(): void {
@@ -244,5 +236,34 @@ export class CloseTicketFormPage implements OnInit, OnDestroy {
       return field.options;
     }
     return [];
+  }
+
+
+
+
+  onFilesSelected(files: File[]) {
+    console.log('Файлы выбраны:', files);
+    this.messageService.add({
+      severity: 'info',
+      summary: 'Файлы выбраны',
+      detail: `Выбрано файлов: ${files.length}`
+    });
+  }
+
+  onFileRemoved(file: File) {
+    console.log('Файл удален:', file.name);
+  }
+
+  onFilesCleared() {
+    console.log('Все файлы очищены');
+    this.messageService.add({
+      severity: 'info',
+      summary: 'Очищено',
+      detail: 'Все файлы удалены'
+    });
+  }
+
+  onUploadComplete(result: {success: File[], errors: {file: File, error: string}[]}) {
+    console.log('Загрузка завершена:', result);
   }
 }
