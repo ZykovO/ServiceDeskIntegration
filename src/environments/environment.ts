@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'http://localhost:3030/miniApp',
+  apiUrl: 'https://7cf00d4f81fb.ngrok-free.app/miniApp',
 };
