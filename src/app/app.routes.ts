@@ -9,7 +9,7 @@ import {TicketClosePage} from './pages/ticket/ticket-close-page/ticket-close-pag
 
 export const routes: Routes = [
   {
-    path: '', component: AppLayout, children: [ // , canActivate: [canActivateAuth]
+    path: '', component: AppLayout, canActivate: [canActivateAuth], children: [ //
 
       {path: 'ticket/:user_id/:id', component: TicketViewPage},
       {path: 'ticket/:user_id/:id/close/:actType', component: TicketClosePage},
