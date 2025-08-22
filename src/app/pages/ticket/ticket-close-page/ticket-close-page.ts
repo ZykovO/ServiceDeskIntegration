@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import { Ticket } from '../../../interfaces/ticket.interface';
 import { StorageService } from '../../../services/local-storage-service';
 import { TicketService } from '../../../services/ticket-service';
@@ -12,7 +12,7 @@ import {
 } from '../../../interfaces/preparenew.response.interface';
 import { Skeleton } from 'primeng/skeleton';
 import { InputText } from 'primeng/inputtext';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import { Select } from 'primeng/select';
 import { Textarea } from 'primeng/textarea';
 import { Card } from 'primeng/card';
@@ -53,6 +53,7 @@ import {UploadFileComponent} from '../../../components/upload-file-component/upl
   styleUrl: './ticket-close-page.css'
 })
 export class TicketClosePage implements OnInit {
+  @ViewChild(UploadFileComponent) uploadFileComponent!: UploadFileComponent;
   ticket?: Ticket | null;
   actType?: number | null;
   private readonly TICKET_KEY = 'currentTicket';
@@ -60,10 +61,36 @@ export class TicketClosePage implements OnInit {
   formFields?: PrepareNewFormResponse | null;
   closeTicketForm!: FormGroup;
   isSubmitting = false;
+  uploadedFiles: File[] = [];
 
   // Значения для полей формы
   currentDate: Date = new Date();
   currentTime: Date = new Date();
+
+// Определяем обязательные поля для закрытия заявки
+  private requiredFields = [
+    'dpl',
+    'tc',
+    'problemsubcategory_id',
+    'performer_name',
+    'performer_ids',
+    'respondent_name',
+    'reason',
+    'worked'
+  ];
+
+  // Маппинг полей к их отображаемым названиям
+  private fieldDisplayNames: { [key: string]: string } = {
+    'dpl': 'Дата выполнения',
+    'tc': 'Время выполнения',
+    'problemsubcategory_id': 'Подкатегория проблемы',
+    'performer_name': 'Имя исполнителя',
+    'performer_ids': 'ID исполнителей',
+    'respondent_name': 'ФИО клиента',
+    'respondent_post': 'Должность',
+    'reason': 'Причина обращения',
+    'worked': 'Выполненные работы'
+  };
 
   constructor(
     private ticketService: TicketService,
@@ -85,18 +112,26 @@ export class TicketClosePage implements OnInit {
   }
 
   private initializeForm(): void {
-    // Инициализируем только основные поля header, остальные добавятся динамически
+    // Инициализируем форму с валидаторами для обязательных полей
     this.closeTicketForm = this.fb.group({
-      dpl: [new Date()], // Дата
-      tc: [new Date()], // Время
-      problemsubcategory_id: [''],
-      performer_name: [''],
-      performer_ids: [[]],
-      respondent_name: ['---'],
-      respondent_post: ['управ.'],
-      reason: [''],
-      worked: ['']
+      dpl: [new Date(), Validators.required],
+      tc: [new Date(), Validators.required],
+      problemsubcategory_id: ['', Validators.required],
+      performer_name: ['', Validators.required],
+      performer_ids: [[], this.arrayNotEmptyValidator],
+      respondent_name: ['---', Validators.required],
+      respondent_post: ['упр.'],
+      reason: ['', Validators.required],
+      worked: ['', Validators.required]
     });
+  }
+  // Кастомный валидатор для проверки непустого массива
+  private arrayNotEmptyValidator(control: any) {
+    const value = control.value;
+    if (!Array.isArray(value) || value.length === 0) {
+      return { arrayEmpty: true };
+    }
+    return null;
   }
 
   private loadTicket(): void {
@@ -159,11 +194,30 @@ export class TicketClosePage implements OnInit {
       const fieldName = `${section}_${field.id || index}`;
       let defaultValue = this.getDefaultValue(field);
 
-      // Добавляем контрол в форму
-      this.closeTicketForm.addControl(fieldName, this.fb.control(defaultValue));
-    });
-  }
+      // Определяем валидаторы для динамических полей
+      const validators = this.getDynamicFieldValidators(field);
 
+      // Добавляем контроль в форму
+      this.closeTicketForm.addControl(fieldName, this.fb.control(defaultValue, validators));
+    });
+  };
+  private getDynamicFieldValidators(field: FormField): any[] {
+    const validators = [];
+
+    // Проверяем, является ли поле обязательным
+    if ('required' in field && field.required === true) {
+      validators.push(Validators.required);
+    }
+
+    // Добавляем дополнительные валидаторы в зависимости от типа поля
+    const fieldType = this.getFieldType(field);
+
+    if (fieldType === 'multiselect') {
+      validators.push(this.arrayNotEmptyValidator);
+    }
+
+    return validators;
+  }
   private getDefaultValue(field: FormField): any {
     if ('value' in field && field.value !== undefined) {
       return field.value;
@@ -184,6 +238,68 @@ export class TicketClosePage implements OnInit {
       default:
         return '';
     }
+  }
+
+  // Метод для проверки валидности формы и отображения ошибок
+  private validateForm(): { isValid: boolean; errors: string[] } {
+    const errors: string[] = [];
+    const formControls = this.closeTicketForm.controls;
+
+    // Проверяем основные поля
+    this.requiredFields.forEach(fieldName => {
+      const control = formControls[fieldName];
+      if (control && control.invalid) {
+        const displayName = this.fieldDisplayNames[fieldName] || fieldName;
+
+        if (control.errors?.['required']) {
+          errors.push(`${displayName} - обязательное поле`);
+        } else if (control.errors?.['arrayEmpty']) {
+          errors.push(`${displayName} - должно содержать хотя бы один элемент`);
+        }
+      }
+    });
+
+    // Проверяем динамические поля
+    Object.keys(formControls).forEach(fieldName => {
+      if ((fieldName.startsWith('body_') || fieldName.startsWith('footer_')) && formControls[fieldName].invalid) {
+        const field = this.findFieldByName(fieldName);
+        const displayName = field?.placeholder || fieldName;
+
+        if (formControls[fieldName].errors?.['required']) {
+          errors.push(`${displayName} - обязательное поле`);
+        } else if (formControls[fieldName].errors?.['arrayEmpty']) {
+          errors.push(`${displayName} - должно содержать хотя бы один элемент`);
+        }
+      }
+    });
+
+    return {
+      isValid: errors.length === 0,
+      errors
+    };
+  }
+
+  private findFieldByName(fieldName: string): FormField | null {
+    const [section, fieldId] = fieldName.split('_');
+    const fields = section === 'body' ? this.formFields?.body : this.formFields?.footer;
+
+    if (fields) {
+      return fields.find((field, index) =>
+        (field.id && field.id.toString() === fieldId) || index.toString() === fieldId
+      ) || null;
+    }
+
+    return null;
+  }
+
+  private showValidationErrors(errors: string[]): void {
+    const errorMessage = errors.join('\n');
+    this.messageService.add({
+      severity: 'warn',
+      summary: 'Не заполнены обязательные поля',
+      detail: errorMessage,
+      life: 7000
+    });
   }
 
   saveTicket(ticket: Ticket): void {
@@ -209,6 +325,7 @@ export class TicketClosePage implements OnInit {
     if (!this.ticket || this.isSubmitting) {
       return;
     }
+    this.uploadFileComponent.uploadAll();
 
     this.isSubmitting = true;
 

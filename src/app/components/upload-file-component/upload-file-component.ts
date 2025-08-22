@@ -1,5 +1,5 @@
 // upload-file-component.ts
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {TicketService} from '../../services/ticket-service';
 import {Card} from 'primeng/card';
@@ -33,8 +33,9 @@ import {FilePreviewPipe} from './file-preview.pipe';
 })
 export class UploadFileComponent {
   @Input() ticketId!: number;
+  @Output() uploadedFiles = new EventEmitter<File[]>();  // <-- правильно
 
-  uploadedFiles: File[] = [];
+  selectedFiles: File[] = [];
   initialFiles: { name: string, url: SafeUrl }[] = [];
   session!: string;
 
@@ -73,13 +74,15 @@ export class UploadFileComponent {
 
   onFileSelect(event: any) {
     for (let file of event.files) {
-      this.uploadedFiles.push(file);
+      this.selectedFiles.push(file);
     }
+    this.uploadedFiles.emit(this.selectedFiles); // эмитим наверх
   }
 
   removeFile(file: File | { name: string, url: SafeUrl }) {
     if (file instanceof File) {
-      this.uploadedFiles = this.uploadedFiles.filter(f => f !== file);
+      this.selectedFiles = this.selectedFiles.filter(f => f !== file);
+      this.uploadedFiles.emit(this.selectedFiles); // эмитим изменения
     } else {
       this.initialFiles = this.initialFiles.filter(f => f !== file);
       this.ticketService.deleteTicketAttachment(file.name).subscribe();
@@ -99,11 +102,11 @@ export class UploadFileComponent {
   }
 
   uploadAll() {
-    if (!this.uploadedFiles.length) return;
+    if (!this.selectedFiles.length) return;
 
     const formData = new FormData();
     formData.append('id', this.ticketId.toString());
-    this.uploadedFiles.forEach(file => {
+    this.selectedFiles.forEach(file => {
       formData.append('files', file, file.name);
     });
 
@@ -111,7 +114,8 @@ export class UploadFileComponent {
       .subscribe({
         next: (res) => {
           console.log('Файлы загружены', res);
-          this.uploadedFiles = [];
+          this.selectedFiles = [];
+          this.uploadedFiles.emit(this.selectedFiles); // очистка наверх
           this.loadInitialFiles();
         },
         error: (err) => {
@@ -121,7 +125,7 @@ export class UploadFileComponent {
   }
 
   get allFiles() {
-    return [...this.initialFiles, ...this.uploadedFiles];
+    return [...this.initialFiles, ...this.selectedFiles];
   }
 
   get totalFilesCount() {

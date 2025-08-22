@@ -9,11 +9,11 @@
             <span class="text-xl font-bold">№{{ ticket?.InternalId }}</span>
             <span class="text-sm opacity-80" *ngIf="ticket?.ExternalId">Внешний: {{ ticket?.ExternalId }}</span>
           </div>
-          <p-chip
-            [label]="ticket?.Status ? 'Активная' : 'Закрытая'"
-            [styleClass]="ticket?.Status ? 'bg-green-500' : 'bg-orange-500'"
-            class="text-white">
-          </p-chip>
+<!--          <p-chip-->
+<!--            [label]="ticket?.Status ? 'Активная' : 'Закрытая'"-->
+<!--            [styleClass]="ticket?.Status ? 'bg-green-500' : 'bg-orange-500'"-->
+<!--            class="text-white">-->
+<!--          </p-chip>-->
         </div>
       </ng-template>
 
@@ -157,13 +157,15 @@
 
     <!-- Кнопки действий -->
     <p-card class="mt-auto shadow-2" *ngIf="ticket?.ActionsButtons">
+      <ng-template pTemplate="header">
+        <div class="flex align-items-center justify-content-between p-3 border-bottom-1 surface-border">
+          <div class="flex align-items-center gap-2">
+            <i class="pi pi-check-circle text-primary"></i>
+            <span class="font-semibold">Закрыть заявку:</span>
+          </div>
+        </div>
+      </ng-template>
       <div class="flex align-items-stretch flex-wrap w-full">
-        <p-button
-          *ngFor="let button of ticket.ActionsButtons.CloseButtons"
-          [label]="button.ActName"
-          class="flex-1 align-self-auto border-round m-1 col-6"
-          (onClick)="executeAction(button.ActType)">
-        </p-button>
         <p-button
           *ngFor="let button of ticket.ActionsButtons.CloseButtons"
           [label]="button.ActName"

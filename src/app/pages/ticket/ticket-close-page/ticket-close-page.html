@@ -206,7 +206,7 @@
       <!-- Динамические поля из footer -->
       @if (formFields.footer && formFields.footer.length > 0) {
         <!-- Компонент загрузки файлов -->
-        <app-upload-file-component [ticketId]="ticket!.InternalId">
+        <app-upload-file-component [ticketId]="ticket!.InternalId" (uploadedFiles)="uploadedFiles = $event">
         </app-upload-file-component>
       }
 
