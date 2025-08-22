@@ -69,7 +69,8 @@ export class CloseTicketPage implements OnInit {
       client_id: ticket.FormData!.client_id, // Нужно получить из ticket или контекста
       ticket_type: ticket.FormData!.ticket_type, // Маппинг типа ticket
       additional_number: ticket.ExternalId || '',
-      act_type: actType
+      act_type: actType,
+      customer_name: ticket.Customer!
     };
 
     // Сохраняем данные в сервисе

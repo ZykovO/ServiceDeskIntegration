@@ -117,7 +117,8 @@ export class CloseTicketFormPage implements OnInit, OnDestroy {
             client_id: 0, // Нужно определить логику получения
             ticket_type: 0, // Нужно замапить из ticket.Type
             additional_number: ticket.ExternalId || '',
-            act_type: 0 // Без act_type, так как он не был передан
+            act_type: 0, // Без act_type, так как он не был передан
+            customer_name: ticket.Customer!
           };
 
           this.requestData = prepareRequest;

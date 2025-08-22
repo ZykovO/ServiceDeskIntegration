@@ -1,139 +1,232 @@
+<!-- ticket-close-page.html -->
 @if (!this.isLoading && formFields) {
-  <p-card class="mb-3 shadow-2">
-    <ng-template pTemplate="header">
-      <div class="flex align-items-center gap-2 p-2 bg-black-alpha-40 text-white border-round-top">
-        <i class="pi pi-lock text-primary text-sm"></i>
-        <span class="text-lg font-bold">Закрытие заявки</span>
-      </div>
-    </ng-template>
-
-    @if (formFields.header && formFields.header.dpl && formFields.header.tc && formFields.header.problemsubcategory_id && formFields.header.performer_name && formFields.header.performer_ids && formFields.header.respondent_name) {
-      <div class="grid gap-2 p-2">
-
-        <!-- Первый ряд: Дата и время в одной строке -->
-        <div class="col-12">
-          <div class="flex gap-2">
-            <div class="flex-1">
-              <label class="text-xs text-300 font-semibold block mb-1">{{ formFields.header.dpl.placeholder }}</label>
-              <p-datePicker
-                [id]="formFields.header.dpl.id"
-                dateFormat="dd.mm.yy"
-                styleClass="w-full"
-                [style]="{'width': '100%', 'font-size': '0.875rem'}">
-              </p-datePicker>
-            </div>
-            <div class="flex-1">
-              <label class="text-xs text-300 font-semibold block mb-1">{{ formFields.header.tc.placeholder }}</label>
-              <p-datePicker
-                [id]="formFields.header.tc.id"
-                [timeOnly]="true"
-                styleClass="w-full"
-                [style]="{'width': '100%', 'font-size': '0.875rem'}">
-              </p-datePicker>
-            </div>
-          </div>
+  <form [formGroup]="closeTicketForm">
+    <p-card class="mb-3 shadow-2">
+      <ng-template pTemplate="header">
+        <div class="flex flex-column align-items-center gap-2 p-2 bg-black-alpha-40 text-white border-round-top">
+          <i class="pi pi-lock text-primary text-sm"></i>
+          <span class="text-lg font-bold">Закрытие заявки №{{ticket?.InternalId}}</span>
+          <span class="text-lg font-medium text-500">{{ ticket?.Shop }}</span>
+          <span class="text-lg font-medium text-500">Внешний №{{ticket?.ExternalId}}</span>
         </div>
+      </ng-template>
 
-        <!-- Второй ряд: Подкатегория (полная ширина) -->
-        <div class="col-12">
-          <label
-            class="text-xs text-300 font-semibold block mb-1">{{ formFields.header.problemsubcategory_id.placeholder }}</label>
-          <p-select
-            [options]="formFields.header.problemsubcategory_id.options"
-            optionLabel="text"
-            optionValue="value"
-            class="w-full"
-            [panelStyle]="{'max-width': '150px'}"
-            [style]="{'font-size': '0.875rem'}">
-          </p-select>
-        </div>
+      @if (formFields.header && formFields.header.dpl && formFields.header.tc && formFields.header.problemsubcategory_id && formFields.header.performer_name && formFields.header.performer_ids && formFields.header.respondent_name) {
+        <div class="grid gap-2 p-2">
 
-        <!-- Третий ряд: Исполнители -->
-        <div class="col-12">
-          <div class="flex gap-2">
-            <div class="flex-1">
-              <label
-                class="text-xs text-300 font-semibold block mb-1">{{ formFields.header.performer_name.placeholder }}</label>
-              <input pInputText
-                     [type]="formFields.header.performer_name.type || 'text'"
-                     [readonly]="formFields.header.performer_name.readonly"
-                     [value]="formFields.header.performer_name.value"
-                     class="w-full text-sm"
-                     style="width: 100%"/>
-            </div>
-            <div class="flex-1">
-              <label
-                class="text-xs text-300 font-semibold block mb-1">{{ formFields.header.performer_ids.placeholder }}</label>
-              <div class="relative">
-                <p-multiSelect
-                  [options]="formFields.header.performer_ids.options"
-                  optionLabel="text"
-                  optionValue="value"
-                  styleClass="w-full">
-                </p-multiSelect>
+          <!-- Первый ряд: Дата и время в одной строке -->
+          <div class="col-12">
+            <div class="flex gap-2">
+              <div class="flex-1">
+                <label class="text-xs text-300 font-semibold block mb-1">{{ formFields.header.dpl.placeholder }}</label>
+                <p-datePicker
+                  formControlName="dpl"
+                  dateFormat="dd-mm-yy"
+                  styleClass="w-full"
+                  [style]="{'width': '100%', 'font-size': '0.875rem'}">
+                </p-datePicker>
+              </div>
+              <div class="flex-1">
+                <label class="text-xs text-300 font-semibold block mb-1">{{ formFields.header.tc.placeholder }}</label>
+                <p-datePicker
+                  formControlName="tc"
+                  [timeOnly]="true"
+                  styleClass="w-full"
+                  [style]="{'width': '100%', 'font-size': '0.875rem'}">
+                </p-datePicker>
               </div>
             </div>
           </div>
-        </div>
 
-        <!-- Четвертый ряд: Данные клиента -->
-        <div class="col-12">
-          <div class="flex gap-2">
-            <div class="flex-auto" style="flex: 0 0 60%">
-              <label
-                class="text-xs text-300 font-semibold block mb-1">{{ formFields.header.respondent_name.placeholder }}</label>
-              <span class="text-100 text-xs opacity-70 block mb-1">* ФИО клиента</span>
-              <input pInputText
-                     [type]="formFields.header.respondent_name.type || 'text'"
-                     [readonly]="formFields.header.respondent_name.readonly"
-                     [defaultValue]="'---'"
-                     class="w-full text-sm"
-                     style="width: 100%"/>
-            </div>
-            <div class="flex-auto" style="flex: 0 0 40%">
-              <label class="text-xs text-300 font-semibold block mb-1">Должность</label>
-              <input pInputText
-                     id="respondent_post"
-                     type="text"
-                     [readonly]="false"
-                     [defaultValue]="'управ.'"
-                     class="w-full text-sm"
-                     style="width: 100%"/>
+          <!-- Второй ряд: Подкатегория (полная ширина) -->
+          <div class="col-12">
+            <label
+              class="text-xs text-300 font-semibold block mb-1">{{ formFields.header.problemsubcategory_id.placeholder }}</label>
+            <p-select
+              formControlName="problemsubcategory_id"
+              [options]="formFields.header.problemsubcategory_id.options"
+              optionLabel="text"
+              optionValue="value"
+              class="w-full"
+              [panelStyle]="{'max-width': '150px'}"
+              [style]="{'font-size': '0.875rem'}">
+            </p-select>
+          </div>
+
+          <!-- Третий ряд: Исполнители -->
+          <div class="col-12">
+            <div class="flex gap-2">
+              <div class="flex-1">
+                <label
+                  class="text-xs text-300 font-semibold block mb-1">{{ formFields.header.performer_name.placeholder }}</label>
+                <input pInputText
+                       formControlName="performer_name"
+                       [type]="formFields.header.performer_name.type || 'text'"
+                       [readonly]="formFields.header.performer_name.readonly"
+                       class="w-full text-sm"
+                       style="width: 100%"/>
+              </div>
+              <div class="flex-1">
+                <label
+                  class="text-xs text-300 font-semibold block mb-1">{{ formFields.header.performer_ids.placeholder }}</label>
+                <div class="relative">
+                  <p-multiSelect
+                    formControlName="performer_ids"
+                    [options]="formFields.header.performer_ids.options"
+                    optionLabel="text"
+                    optionValue="value"
+                    styleClass="w-full">
+                  </p-multiSelect>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
 
-        <!-- Пятый ряд: Текстовые области (стекируются вертикально на мобильных) -->
-        <div class="col-12">
-          <label class="text-xs text-300 font-semibold block mb-1">{{ formFields.header.reason?.placeholder }}</label>
-          <textarea pTextarea
-                    rows="3"
-                    [id]="formFields.header.reason?.id"
-                    [readonly]="formFields.header.reason?.readonly"
-                    [value]="formFields.header.reason?.value"
-                    class="w-full text-sm">
-          </textarea>
-        </div>
+          <!-- Четвертый ряд: Данные клиента -->
+          <div class="col-12">
+            <div class="flex gap-2">
+              <div class="flex-auto" style="flex: 0 0 60%">
+                <label
+                  class="text-xs text-300 font-semibold block mb-1">{{ formFields.header.respondent_name.placeholder }}</label>
+                <span class="text-100 text-xs opacity-70 block mb-1">* ФИО клиента</span>
+                <input pInputText
+                       formControlName="respondent_name"
+                       [type]="formFields.header.respondent_name.type || 'text'"
+                       [readonly]="formFields.header.respondent_name.readonly"
+                       class="w-full text-sm"
+                       style="width: 100%"/>
+              </div>
+              <div class="flex-auto" style="flex: 0 0 40%">
+                <label class="text-xs text-300 font-semibold block mb-1">Должность</label>
+                <input pInputText
+                       formControlName="respondent_post"
+                       type="text"
+                       [readonly]="false"
+                       class="w-full text-sm"
+                       style="width: 100%"/>
+              </div>
+            </div>
+          </div>
 
-        <div class="col-12">
-          <label class="text-xs text-300 font-semibold block mb-1">{{ formFields.header.worked?.placeholder }}</label>
-          <textarea pTextarea
-                    rows="3"
-                    [id]="formFields.header.worked?.id"
-                    [readonly]="formFields.header.worked?.readonly"
-                    [value]="formFields.header.worked?.value"
-                    class="w-full text-sm">
-          </textarea>
+          <!-- Пятый ряд: Текстовые области -->
+          <div class="col-12">
+            <label class="text-xs text-300 font-semibold block mb-1">{{ formFields.header.reason?.placeholder }}</label>
+            <textarea pTextarea
+                      formControlName="reason"
+                      rows="3"
+                      [readonly]="formFields.header.reason?.readonly"
+                      class="w-full text-sm">
+            </textarea>
+          </div>
+
+          <div class="col-12">
+            <label class="text-xs text-300 font-semibold block mb-1">{{ formFields.header.worked?.placeholder }}</label>
+            <textarea pTextarea
+                      formControlName="worked"
+                      rows="3"
+                      [readonly]="formFields.header.worked?.readonly"
+                      class="w-full text-sm">
+            </textarea>
+          </div>
         </div>
+      }
+
+
+
+      <!-- Динамические поля из body -->
+      @if (formFields.body && formFields.body.length > 0) {
+        <div class="mt-4 p-3 border-top-1 border-200">
+          <h6 class="text-base font-semibold mb-3 text-900">Дополнительные поля</h6>
+          <div class="grid gap-2">
+            @for (field of formFields.body; track field.id; let i = $index) {
+              <div class="col-12 lg:col-6">
+
+                <!-- Динамические поля -->
+                @if (isFormSelect(field)) {
+                  <label class="text-xs text-300 font-semibold block mb-1">{{ field.placeholder }}</label>
+                  @if (isMultiSelect(field)) {
+                    <p-multiSelect
+                      [formControlName]="getDynamicFieldName(field, 'body', i)"
+                      [options]="field.options"
+                      optionLabel="text"
+                      optionValue="value"
+                      class="w-full"
+                      [style]="{'font-size': '0.875rem'}">
+                    </p-multiSelect>
+                  } @else {
+                    <p-select
+                      [formControlName]="getDynamicFieldName(field, 'body', i)"
+                      [options]="field.options"
+                      optionLabel="text"
+                      optionValue="value"
+                      class="w-full"
+                      [style]="{'font-size': '0.875rem'}">
+                    </p-select>
+                  }
+                } @else if (isTextarea(field)) {
+                  <label class="text-xs text-300 font-semibold block mb-1">{{ field.placeholder }}</label>
+                  <textarea pTextarea
+                            [formControlName]="getDynamicFieldName(field, 'body', i)"
+                            [rows]="getFieldRows(field)"
+                            [readonly]="field.readonly || false"
+                            class="w-full text-sm">
+                  </textarea>
+                } @else if (isCheckbox(field)) {
+                  <div class="field-checkbox">
+                    <p-checkbox
+                      [formControlName]="getDynamicFieldName(field, 'body', i)"
+                      [binary]="true"
+                      [disabled]="field.readonly || false">
+                    </p-checkbox>
+                    <label class="ml-2 text-sm">{{ field.placeholder }}</label>
+                  </div>
+                } @else if (isDateField(field)) {
+                  <label class="text-xs text-300 font-semibold block mb-1">{{ field.placeholder }}</label>
+                  <p-datePicker
+                    [formControlName]="getDynamicFieldName(field, 'body', i)"
+                    dateFormat="dd.mm.yy"
+                    styleClass="w-full"
+                    [style]="{'width': '100%', 'font-size': '0.875rem'}">
+                  </p-datePicker>
+                } @else {
+                  <label class="text-xs text-300 font-semibold block mb-1">{{ field.placeholder }}</label>
+                  <input pInputText
+                         [formControlName]="getDynamicFieldName(field, 'body', i)"
+                         [type]="getFieldInputType(field)"
+                         [readonly]="field.readonly || false"
+                         class="w-full text-sm"
+                         style="width: 100%"/>
+                }
+              </div>
+            }
+          </div>
+        </div>
+      }
+
+      <!-- Динамические поля из footer -->
+      @if (formFields.footer && formFields.footer.length > 0) {
+        <!-- Компонент загрузки файлов -->
+        <app-upload-file-component [ticketId]="ticket!.InternalId">
+        </app-upload-file-component>
+      }
+
+      <!-- Кнопка закрытия заявки -->
+      <div class="flex justify-content-center mt-4 p-3 border-top-1 border-200">
+        <p-button
+          label="Закрыть заявку"
+          icon="pi pi-check"
+          severity="success"
+          size="large"
+          [loading]="isSubmitting"
+          [disabled]="closeTicketForm.invalid || isSubmitting"
+          (onClick)="onCloseTicket()"
+          styleClass="w-full md:w-auto">
+        </p-button>
       </div>
-    }
 
-    <!-- Компонент загрузки файлов -->
-    <app-upload-file-component [ticketId]="ticket!.InternalId">
-
-    </app-upload-file-component>
-
-  </p-card>
+    </p-card>
+  </form>
 } @else {
   <p-skeleton class="w-full h-full"/>
 }
+

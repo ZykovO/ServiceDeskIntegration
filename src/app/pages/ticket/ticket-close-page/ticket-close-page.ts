@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Ticket } from '../../../interfaces/ticket.interface';
 import { StorageService } from '../../../services/local-storage-service';
 import { TicketService } from '../../../services/ticket-service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PrepareNewRequest } from '../../../interfaces/prepare-new-request';
 import {
   FormField,
@@ -12,7 +12,7 @@ import {
 } from '../../../interfaces/preparenew.response.interface';
 import { Skeleton } from 'primeng/skeleton';
 import { InputText } from 'primeng/inputtext';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Select } from 'primeng/select';
 import { Textarea } from 'primeng/textarea';
 import { Card } from 'primeng/card';
@@ -30,14 +30,6 @@ import { Tooltip } from 'primeng/tooltip';
 import { Observable } from 'rxjs';
 import {UploadFileComponent} from '../../../components/upload-file-component/upload-file-component';
 
-// Удаляем дублирующийся интерфейс, он уже определен в file-upload-component
-// interface UploadResponse {
-//   success: boolean;
-//   message: string;
-//   fileId?: string;
-//   url?: string;
-// }
-
 @Component({
   selector: 'app-ticket-close-page',
   imports: [
@@ -53,6 +45,9 @@ import {UploadFileComponent} from '../../../components/upload-file-component/upl
     PrimeTemplate,
     TableModule,
     UploadFileComponent,
+    Button,
+    Toast,
+    Checkbox
   ],
   templateUrl: './ticket-close-page.html',
   styleUrl: './ticket-close-page.css'
@@ -63,15 +58,22 @@ export class TicketClosePage implements OnInit {
   private readonly TICKET_KEY = 'currentTicket';
   isLoading = true;
   formFields?: PrepareNewFormResponse | null;
+  closeTicketForm!: FormGroup;
+  isSubmitting = false;
 
+  // Значения для полей формы
+  currentDate: Date = new Date();
+  currentTime: Date = new Date();
 
   constructor(
     private ticketService: TicketService,
     private route: ActivatedRoute,
+    private router: Router,
     private storage: StorageService,
-    private messageService: MessageService
+    private messageService: MessageService,
+    private fb: FormBuilder
   ) {
-    // Инициализируем функцию загрузки через сервис
+    this.initializeForm();
   }
 
   ngOnInit(): void {
@@ -82,7 +84,20 @@ export class TicketClosePage implements OnInit {
     this.isLoading = false;
   }
 
-
+  private initializeForm(): void {
+    // Инициализируем только основные поля header, остальные добавятся динамически
+    this.closeTicketForm = this.fb.group({
+      dpl: [new Date()], // Дата
+      tc: [new Date()], // Время
+      problemsubcategory_id: [''],
+      performer_name: [''],
+      performer_ids: [[]],
+      respondent_name: ['---'],
+      respondent_post: ['управ.'],
+      reason: [''],
+      worked: ['']
+    });
+  }
 
   private loadTicket(): void {
     const ticketId = Number(this.route.snapshot.paramMap.get('id'));
@@ -99,24 +114,75 @@ export class TicketClosePage implements OnInit {
         client_id: this.ticket.FormData!.client_id,
         ticket_type: this.ticket.FormData!.ticket_type,
         additional_number: this.ticket.ExternalId || '',
-        act_type: this.actType
+        act_type: this.actType,
+        customer_name: this.ticket.Shop!
       };
 
       this.ticketService.get_preparenew(prepareRequest).subscribe({
         next: (preparenewForm) => {
           this.formFields = preparenewForm;
+          this.populateFormWithInitialData();
         },
         error: (error) => {
           console.error('Ошибка получения формы:', error);
           this.isLoading = false;
+          this.showError('Ошибка загрузки формы');
         }
       });
 
       console.log(prepareRequest);
-      return null;
     } else {
       this.isLoading = false;
-      return null;
+    }
+  }
+
+  private populateFormWithInitialData(): void {
+    if (this.formFields?.header) {
+      const header = this.formFields.header;
+
+      // Заполняем форму начальными данными из API
+      this.closeTicketForm.patchValue({
+        performer_name: header.performer_name?.value || '',
+        reason: header.reason?.value || '',
+        worked: header.worked?.value || ''
+      });
+    }
+
+    // Добавляем динамические поля из body
+    this.addDynamicFields(this.formFields?.body || [], 'body');
+    // Добавляем динамические поля из footer
+    this.addDynamicFields(this.formFields?.footer || [], 'footer');
+  }
+
+  private addDynamicFields(fields: FormField[], section: string): void {
+    fields.forEach((field, index) => {
+      const fieldName = `${section}_${field.id || index}`;
+      let defaultValue = this.getDefaultValue(field);
+
+      // Добавляем контрол в форму
+      this.closeTicketForm.addControl(fieldName, this.fb.control(defaultValue));
+    });
+  }
+
+  private getDefaultValue(field: FormField): any {
+    if ('value' in field && field.value !== undefined) {
+      return field.value;
+    }
+
+    const fieldType = this.getFieldType(field);
+
+    switch (fieldType) {
+      case 'select':
+      case 'multiselect':
+        return fieldType === 'multiselect' ? [] : '';
+      case 'checkbox':
+        return false;
+      case 'number':
+        return 0;
+      case 'date':
+        return new Date();
+      default:
+        return '';
     }
   }
 
@@ -139,5 +205,155 @@ export class TicketClosePage implements OnInit {
     return this.getFieldType(field) === 'select';
   }
 
+  onCloseTicket(): void {
+    if (!this.ticket || this.isSubmitting) {
+      return;
+    }
 
+    this.isSubmitting = true;
+
+    // Собираем данные формы
+    const formData = this.closeTicketForm.value;
+
+    // Разделяем данные по секциям
+    const headerData = this.extractSectionData(formData, 'header');
+    const bodyData = this.extractSectionData(formData, 'body');
+    const footerData = this.extractSectionData(formData, 'footer');
+
+    // Подготавливаем данные для отправки
+    const closeTicketData = {
+      ticket_id: this.ticket.InternalId,
+      act_type: this.actType,
+      contractor_id: this.ticket.FormData!.contractor_id,
+      client_id: this.ticket.FormData!.client_id,
+      ticket_type: this.ticket.FormData!.ticket_type,
+      customer_name: this.ticket.Shop!,
+      additional_number: this.ticket.ExternalId || '',
+
+      // Данные header формы
+      header: {
+        dpl: this.formatDateOnly(formData.dpl),
+        tc: this.formatTimeOnly(formData.tc),
+        problemsubcategory_id: formData.problemsubcategory_id,
+        performer_name: formData.performer_name,
+        performer_ids: formData.performer_ids,
+        respondent_name: formData.respondent_name,
+        respondent_post: formData.respondent_post,
+        reason: formData.reason,
+        worked: formData.worked
+      },
+
+      // Динамические данные из body и footer
+      body: bodyData,
+      footer: footerData
+    };
+
+    console.log('Отправляем данные закрытия заявки:', closeTicketData);
+
+    // Вызываем метод сервиса для закрытия заявки
+    this.ticketService.closeTicket(closeTicketData).subscribe({
+      next: (response) => {
+        console.log('Заявка успешно закрыта:', response);
+        this.showSuccess('Заявка успешно закрыта');
+
+        // Перенаправляем обратно к списку заявок или детальной странице
+        this.router.navigate(['/tickets']);
+      },
+      error: (error) => {
+        console.error('Ошибка при закрытии заявки:', error);
+        this.showError('Ошибка при закрытии заявки');
+        this.isSubmitting = false;
+      }
+    });
+  }
+
+  private extractSectionData(formData: any, section: string): any {
+    const sectionData: any = {};
+    const prefix = `${section}_`;
+
+    Object.keys(formData).forEach(key => {
+      if (key.startsWith(prefix)) {
+        const fieldKey = key.replace(prefix, '');
+        sectionData[fieldKey] = formData[key];
+      }
+    });
+
+    return sectionData;
+  }
+
+
+
+  formatDateOnly(date: Date): string {
+
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // месяцы с 0
+    const day = String(date.getDate()).padStart(2, '0');
+
+    return `${year}-${month}-${day}`;
+  }
+
+  formatTimeOnly(date: Date): string {
+    const hh = String(date.getHours()).padStart(2, '0');
+    const mm = String(date.getMinutes()).padStart(2, '0');
+    const ss = String(date.getSeconds()).padStart(2, '0');
+
+    return(`${hh}:${mm}:${ss}`); // 11:05:07
+  }
+
+
+  private showSuccess(message: string): void {
+    this.messageService.add({
+      severity: 'success',
+      summary: 'Успех',
+      detail: message
+    });
+  }
+
+  private showError(message: string): void {
+    this.messageService.add({
+      severity: 'error',
+      summary: 'Ошибка',
+      detail: message
+    });
+  }
+
+  // Вспомогательные методы для работы с динамическими полями
+  getDynamicFieldName(field: FormField, section: string, index: number): string {
+    return `${section}_${field.id || index}`;
+  }
+
+  getDynamicFieldControl(field: FormField, section: string, index: number) {
+    const fieldName = this.getDynamicFieldName(field, section, index);
+    return this.closeTicketForm.get(fieldName);
+  }
+
+  isTextarea(field: FormField): boolean {
+    return 'rows' in field && field.rows !== undefined;
+  }
+
+  isCheckbox(field: FormField): boolean {
+    return this.getFieldType(field) === 'checkbox';
+  }
+
+  isMultiSelect(field: FormField): boolean {
+    return this.getFieldType(field) === 'multiselect';
+  }
+
+  isDateField(field: FormField): boolean {
+    return this.getFieldType(field) === 'date';
+  }
+
+  getFieldRows(field: FormField): number {
+    if ('rows' in field && typeof field.rows === 'number') {
+      return field.rows;
+    }
+    return 3; // значение по умолчанию
+  }
+
+  getFieldInputType(field: FormField): string {
+    if ('type' in field && typeof field.type === 'string') {
+      return field.type;
+    }
+    return 'text'; // значение по умолчанию
+  }
 }

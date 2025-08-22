@@ -55,4 +55,10 @@ export class TicketService {
   uploadTicketAttachments(ticketId: number, formData: FormData, session: string) {
     return this.http.post(`${this.API_URL}/tickets/preparenew/files/`, formData);
   }
+
+
+  closeTicket(closeTicketData: any): Observable<any> {
+    const url = `${this.API_URL}/tickets/preparenew/close`; // Замените на правильный endpoint
+    return this.http.post(url, closeTicketData);
+  }
 }

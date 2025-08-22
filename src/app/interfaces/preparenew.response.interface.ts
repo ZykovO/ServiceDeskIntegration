@@ -60,6 +60,7 @@ export interface HeadActBlock {
 // Main response interface
 export interface PrepareNewFormResponse {
   header: HeadActBlock;
+  body: FormField[];
   footer: FormField[];
 }
 

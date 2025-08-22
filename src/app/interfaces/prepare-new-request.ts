@@ -9,4 +9,5 @@ export interface PrepareNewRequest {
   ticket_type: number;
   additional_number?: string;
   act_type: number;
+  customer_name: string;
 }
