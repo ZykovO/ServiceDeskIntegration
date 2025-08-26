@@ -1,4 +1,4 @@
 export const environment = {
   production: false,
-  apiUrl: 'https://7cf00d4f81fb.ngrok-free.app/miniApp',
+  apiUrl: 'https://sd-telegram.pc-service.ua/miniApp',
 };
