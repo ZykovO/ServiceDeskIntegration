@@ -29,6 +29,7 @@ import { Button } from 'primeng/button';
 import { Tooltip } from 'primeng/tooltip';
 import { Observable } from 'rxjs';
 import {UploadFileComponent} from '../../../components/upload-file-component/upload-file-component';
+import {TelegramService} from '../../../services/telegram';
 
 @Component({
   selector: 'app-ticket-close-page',
@@ -98,7 +99,8 @@ export class TicketClosePage implements OnInit {
     private router: Router,
     private storage: StorageService,
     private messageService: MessageService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private telegramService: TelegramService
   ) {
     this.initializeForm();
   }
@@ -374,7 +376,7 @@ export class TicketClosePage implements OnInit {
         this.showSuccess('Заявка успешно закрыта');
 
         // Перенаправляем обратно к списку заявок или детальной странице
-        this.router.navigate(['/tickets']);
+        this.telegramService.close()
       },
       error: (error) => {
         console.error('Ошибка при закрытии заявки:', error);
