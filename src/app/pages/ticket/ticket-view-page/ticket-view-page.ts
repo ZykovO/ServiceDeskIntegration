@@ -56,6 +56,7 @@ export class TicketViewPage implements OnInit {
 
     const ticketId = Number(this.route.snapshot.paramMap.get('id'));
     const userId = Number(this.route.snapshot.paramMap.get('user_id'));
+    this.storage.set("user_id",userId)
     this.userId=userId
     if (isNaN(ticketId)) {
       this.error = 'Неверный ID заявки';

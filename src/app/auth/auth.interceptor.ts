@@ -76,10 +76,6 @@ const addToken = (req: HttpRequest<any>, token: string) => {
 };
 
 const handleHttpError = (error: any) => {
-  // Игнорируем ошибки авторизации (они обрабатываются отдельно)
-  if (error.status === 401) {
-    return;
-  }
 
   // Игнорируем запросы к эндпоинтам авторизации
   if (error.url?.includes('/auth/')) {
@@ -93,6 +89,10 @@ const handleHttpError = (error: any) => {
     case 0:
       errorMessage = 'Нет соединения с сервером';
       errorTitle = 'Нет соединения';
+      break;
+    case 401:
+      errorMessage = 'Не удалось авторизоваться';
+      errorTitle = 'Доступ запрещен';
       break;
     case 403:
       errorMessage = 'Недостаточно прав для выполнения операции';

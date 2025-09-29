@@ -27,7 +27,7 @@ import { TableModule } from 'primeng/table';
 import { Tag } from 'primeng/tag';
 import { Button } from 'primeng/button';
 import { Tooltip } from 'primeng/tooltip';
-import { Observable } from 'rxjs';
+import {Observable, timeout} from 'rxjs';
 import {UploadFileComponent} from '../../../components/upload-file-component/upload-file-component';
 import {TelegramService} from '../../../services/telegram';
 
@@ -375,6 +375,7 @@ export class TicketClosePage implements OnInit {
         console.log('Заявка успешно закрыта:', response);
         this.showSuccess('Заявка успешно закрыта');
 
+        timeout(1)
         // Перенаправляем обратно к списку заявок или детальной странице
         this.telegramService.close()
       },

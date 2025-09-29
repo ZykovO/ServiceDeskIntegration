@@ -7,6 +7,7 @@ import {ActivatedRoute, Router} from '@angular/router';
 import { TelegramService } from '../services/telegram';
 
 import { environment } from '../../environments/environment';
+import {StorageService} from '../services/local-storage-service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,6 +17,8 @@ export class AuthService {
   private router = inject(Router);
   private telegramService = inject(TelegramService);
   private route = inject(ActivatedRoute);
+  private storage = inject(StorageService);
+
 
   token: string | null = null;
   refresh: string | null = null;
@@ -105,9 +108,9 @@ export class AuthService {
       };
 
       console.log('Making request to:', `${this.baseApiUrl}/auth/telegram/`);
-
+      var userId = this.storage.get("user_id")
       return this.http.post<TokenResponse>(
-        `${this.baseApiUrl}/auth/telegram/`,
+        `${this.baseApiUrl}/auth/telegram/${userId}`,
         payload
       ).pipe(
         tap(response => {
