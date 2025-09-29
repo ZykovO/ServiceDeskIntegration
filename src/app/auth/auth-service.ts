@@ -87,6 +87,7 @@ export class AuthService {
     console.log('Starting Telegram authentication');
 
     try {
+      const userId = Number(this.route.snapshot.paramMap.get('user_id'));
       const initData = this.telegramService.initData;
       const initDataUnsafe = this.telegramService.initDataUnsafe;
 
@@ -108,7 +109,6 @@ export class AuthService {
       };
 
       console.log('Making request to:', `${this.baseApiUrl}/auth/telegram/`);
-      var userId = this.storage.get("user_id")
       return this.http.post<TokenResponse>(
         `${this.baseApiUrl}/auth/telegram/${userId}`,
         payload
